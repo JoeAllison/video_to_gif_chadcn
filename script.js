@@ -603,6 +603,27 @@ function createFrameSequence(frames, onComplete) {
     }
 }
 
+// Reset upload area without breaking event listeners
+function resetUploadArea() {
+    // Clear existing content
+    uploadArea.innerHTML = '';
+    
+    // Create and append new elements
+    const uploadIcon = document.createElement('div');
+    uploadIcon.className = 'upload-icon drone-m-4';
+    uploadIcon.innerHTML = '<i class="fas fa-video drone-text--primary" style="font-size: 4rem;"></i>';
+    
+    const uploadText = document.createElement('div');
+    uploadText.className = 'upload-text';
+    uploadText.innerHTML = `
+        <h3 class="drone-text--lg drone-text--semibold drone-text--neutral drone-m-4">Drop your video file here</h3>
+        <p class="drone-text--base drone-text--neutral drone-m-0">or click to browse</p>
+    `;
+    
+    uploadArea.appendChild(uploadIcon);
+    uploadArea.appendChild(uploadText);
+}
+
 // Reset converter
 function resetConverter() {
     // Clear variables
@@ -611,6 +632,9 @@ function resetConverter() {
     
     // Clear video player
     videoPlayer.src = '';
+    
+    // Clear file input
+    fileInput.value = '';
     
     // Clear frames
     if (window.videoFrames) {
@@ -634,16 +658,8 @@ function resetConverter() {
     progressText.textContent = 'Processing frames...';
     progressPercent.textContent = '0%';
     
-    // Reset upload area
-    uploadArea.innerHTML = `
-        <div class="upload-icon drone-m-4">
-            <i class="fas fa-video drone-text--primary" style="font-size: 4rem;"></i>
-        </div>
-        <div class="upload-text">
-            <h3 class="drone-text--lg drone-text--semibold drone-text--neutral drone-m-4">Drop your MP4 file here</h3>
-            <p class="drone-text--base drone-text--neutral drone-m-0">or click to browse</p>
-        </div>
-    `;
+    // Reset upload area - preserve event listeners by updating content directly
+    resetUploadArea();
     
     // Reset buttons
     startBtn.disabled = false;
