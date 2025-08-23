@@ -6,7 +6,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import { Slider } from '@/components/ui/slider'
-import { Upload, Video, Play, Download, RotateCcw, CheckCircle, Info } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { 
+  Upload, 
+  Video, 
+  Play, 
+  Download, 
+  RotateCcw, 
+  CheckCircle, 
+  Info, 
+  Settings,
+  FileVideo,
+  Sparkles,
+  Zap,
+  Monitor
+} from 'lucide-react'
 
 interface VideoFrame {
   dataUrl: string
@@ -130,20 +145,30 @@ export default function VideoToGifConverter() {
   }, [videoFrames])
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
-      <header className="border-b bg-card">
+      <header className="border-b bg-white/80 backdrop-blur-sm dark:bg-slate-900/80 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Video className="h-8 w-8 text-primary" />
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                <Video className="h-6 w-6 text-white" />
+              </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Video to GIF Converter</h1>
-                <p className="text-sm text-muted-foreground">Powered by ShadCN Design System</p>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-200 bg-clip-text text-transparent">
+                  Video to GIF Converter
+                </h1>
+                <p className="text-sm text-slate-600 dark:text-slate-400 flex items-center space-x-2">
+                  <Sparkles className="h-3 w-3" />
+                  <span>Powered by ShadCN Design System</span>
+                </p>
               </div>
             </div>
-            <div className="text-sm text-muted-foreground">
-              v2.0 - ShadCN UI
+            <div className="flex items-center space-x-3">
+              <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                <Zap className="h-3 w-3 mr-1" />
+                v2.0 - ShadCN UI
+              </Badge>
             </div>
           </div>
         </div>
@@ -151,46 +176,67 @@ export default function VideoToGifConverter() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-6xl mx-auto space-y-8">
+          
+          {/* Hero Section */}
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-semibold text-slate-800 dark:text-slate-200">
+              Transform Your Videos into Beautiful Animated GIFs
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Upload any video format and convert it to high-quality animated GIFs with our advanced browser-based converter. 
+              No server uploads, complete privacy, and professional results.
+            </p>
+          </div>
           
           {/* Upload Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Upload className="h-5 w-5" />
-                <span>Upload Your Video</span>
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
+            <CardHeader className="text-center pb-6">
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                <Upload className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl text-slate-800 dark:text-slate-200">
+                Upload Your Video
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-lg text-slate-600 dark:text-slate-400">
                 Drag and drop your video file or click to browse
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-8 pb-8">
               <div
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group ${
                   videoFile 
-                    ? 'border-green-500 bg-green-50 dark:bg-green-950' 
-                    : 'border-muted-foreground/25 hover:border-primary/50'
+                    ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
+                    : 'border-slate-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30'
                 }`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onClick={() => fileInputRef.current?.click()}
               >
                 {videoFile ? (
-                  <div className="space-y-3">
-                    <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
-                    <h3 className="text-lg font-semibold text-green-700 dark:text-green-300">
+                  <div className="space-y-4">
+                    <div className="mx-auto w-20 h-20 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                      <CheckCircle className="h-10 w-10 text-white" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-green-700 dark:text-green-300">
                       File Selected!
                     </h3>
-                    <p className="text-sm text-muted-foreground">{videoFile.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Click "Start Conversion" to begin
+                    <p className="text-slate-700 dark:text-slate-300 font-medium">{videoFile.name}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Click "Start Conversion" to begin processing
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    <Video className="h-12 w-12 text-muted-foreground mx-auto" />
-                    <h3 className="text-lg font-semibold">Drop your video file here</h3>
-                    <p className="text-sm text-muted-foreground">or click to browse</p>
+                  <div className="space-y-4">
+                    <div className="mx-auto w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center group-hover:bg-blue-100 dark:group-hover:bg-blue-900/30 transition-colors">
+                      <FileVideo className="h-10 w-10 text-slate-400 group-hover:text-blue-500 transition-colors" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300">
+                      Drop your video file here
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400">
+                      or click to browse
+                    </p>
                   </div>
                 )}
               </div>
@@ -206,97 +252,134 @@ export default function VideoToGifConverter() {
                 className="hidden"
               />
               
-              <div className="mt-4 text-center">
-                <p className="text-xs text-muted-foreground flex items-center justify-center space-x-1">
-                  <Info className="h-3 w-3" />
-                  <span>Supports MP4, MOV, AVI, WebM, and other video formats</span>
-                </p>
+              <div className="mt-6 text-center">
+                <div className="inline-flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-full">
+                  <Info className="h-4 w-4 text-slate-500" />
+                  <span className="text-sm text-slate-600 dark:text-slate-400">
+                    Supports MP4, MOV, AVI, WebM, and other video formats
+                  </span>
+                </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Video Preview */}
           {videoUrl && (
-            <Card>
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
               <CardHeader>
-                <CardTitle>Video Preview</CardTitle>
+                <CardTitle className="flex items-center space-x-2 text-slate-800 dark:text-slate-200">
+                  <Monitor className="h-5 w-5" />
+                  <span>Video Preview</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <video
-                  ref={videoRef}
-                  src={videoUrl}
-                  controls
-                  className="w-full rounded-lg"
-                />
+                <div className="relative">
+                  <video
+                    ref={videoRef}
+                    src={videoUrl}
+                    controls
+                    className="w-full rounded-xl shadow-lg"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="secondary" className="bg-black/20 text-white backdrop-blur-sm">
+                      {videoFile?.name}
+                    </Badge>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
 
           {/* Controls */}
           {videoFile && (
-            <Card>
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
               <CardHeader>
-                <CardTitle>Conversion Settings</CardTitle>
+                <CardTitle className="flex items-center space-x-2 text-slate-800 dark:text-slate-200">
+                  <Settings className="h-5 w-5" />
+                  <span>Conversion Settings</span>
+                </CardTitle>
+                <CardDescription>
+                  Customize your GIF output with these advanced settings
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-medium">Frames per Second (FPS)</label>
-                    <div className="flex items-center space-x-4">
+              <CardContent className="space-y-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* FPS Control */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Frames per Second (FPS)
+                      </label>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+                        {fps} FPS
+                      </Badge>
+                    </div>
+                    <div className="space-y-3">
                       <Slider
                         value={[fps]}
                         onValueChange={(value) => setFps(value[0])}
                         max={30}
                         min={1}
                         step={1}
-                        className="flex-1"
+                        className="w-full"
                       />
-                      <span className="text-lg font-bold text-primary w-8 text-center">
-                        {fps}
-                      </span>
+                      <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span>1 FPS</span>
+                        <span>30 FPS</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>1</span>
-                      <span>30</span>
-                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                      Higher FPS creates smoother animations but larger file sizes
+                    </p>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-sm font-medium">Quality</label>
-                    <div className="flex items-center space-x-4">
+                  {/* Quality Control */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        Image Quality
+                      </label>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300">
+                        {quality}/10
+                      </Badge>
+                    </div>
+                    <div className="space-y-3">
                       <Slider
                         value={[quality]}
                         onValueChange={(value) => setQuality(value[0])}
                         max={10}
                         min={1}
                         step={1}
-                        className="flex-1"
+                        className="w-full"
                       />
-                      <span className="text-lg font-bold text-primary w-8 text-center">
-                        {quality}
-                      </span>
+                      <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span>Low</span>
+                        <span>High</span>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Low</span>
-                      <span>High</span>
-                    </div>
+                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                      Higher quality means better image clarity but larger files
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex space-x-3">
+                <Separator />
+
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <Button 
                     onClick={startConversion} 
                     disabled={isConverting}
-                    className="flex-1"
+                    size="lg"
+                    className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     {isConverting ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3" />
                         Converting...
                       </>
                     ) : (
                       <>
-                        <Play className="h-4 w-4 mr-2" />
+                        <Play className="h-5 w-5 mr-3" />
                         Start Conversion
                       </>
                     )}
@@ -305,8 +388,10 @@ export default function VideoToGifConverter() {
                     variant="outline" 
                     onClick={resetConverter}
                     disabled={isConverting}
+                    size="lg"
+                    className="border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
                   >
-                    <RotateCcw className="h-4 w-4 mr-2" />
+                    <RotateCcw className="h-5 w-5 mr-3" />
                     Reset
                   </Button>
                 </div>
@@ -316,47 +401,72 @@ export default function VideoToGifConverter() {
 
           {/* Progress */}
           {isConverting && (
-            <Card>
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
               <CardHeader>
-                <CardTitle>Converting Video</CardTitle>
+                <CardTitle className="text-slate-800 dark:text-slate-200">
+                  Converting Video
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <Progress value={progress} className="w-full" />
-                <p className="text-sm text-muted-foreground mt-2">
-                  Processing frames... {Math.round(progress)}%
-                </p>
+              <CardContent className="space-y-4">
+                <Progress value={progress} className="w-full h-3" />
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Processing frames... {Math.round(progress)}%
+                  </p>
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                    {Math.round(progress)}%
+                  </Badge>
+                </div>
               </CardContent>
             </Card>
           )}
 
           {/* Output */}
           {showPreview && videoFrames.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Conversion Complete!</CardTitle>
-                <CardDescription>
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm dark:bg-slate-900/80">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                  <CheckCircle className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-2xl text-slate-800 dark:text-slate-200">
+                  Conversion Complete!
+                </CardTitle>
+                <CardDescription className="text-lg text-slate-600 dark:text-slate-400">
                   Your video has been converted to {videoFrames.length} frames
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6">
                 <div className="text-center">
-                  <img
-                    src={videoFrames[currentFrame]?.dataUrl}
-                    alt={`Frame ${currentFrame + 1}`}
-                    className="max-w-full h-auto rounded-lg border"
-                  />
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Frame {currentFrame + 1} of {videoFrames.length}
-                  </p>
+                  <div className="relative inline-block">
+                    <img
+                      src={videoFrames[currentFrame]?.dataUrl}
+                      alt={`Frame ${currentFrame + 1}`}
+                      className="max-w-full h-auto rounded-xl border-4 border-white dark:border-slate-800 shadow-2xl"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <Badge className="bg-black/20 text-white backdrop-blur-sm">
+                        Frame {currentFrame + 1} of {videoFrames.length}
+                      </Badge>
+                    </div>
+                  </div>
                 </div>
                 
-                <div className="flex space-x-3">
-                  <Button onClick={downloadGif} className="flex-1">
-                    <Download className="h-4 w-4 mr-2" />
+                <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                  <Button 
+                    onClick={downloadGif} 
+                    size="lg"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    <Download className="h-5 w-5 mr-3" />
                     Download Frame
                   </Button>
-                  <Button variant="outline" onClick={resetConverter}>
-                    <RotateCcw className="h-4 w-4 mr-2" />
+                  <Button 
+                    variant="outline" 
+                    onClick={resetConverter}
+                    size="lg"
+                    className="border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
+                  >
+                    <RotateCcw className="h-5 w-5 mr-3" />
                     Convert Another Video
                   </Button>
                 </div>
