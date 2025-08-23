@@ -1,5 +1,17 @@
 {
   "mcpServers": {
+    "figma-mcp": {
+      "url": "https://mcp-figma.sg.agoda.is/mcp/",
+      "description": "Figma to Drone.js Code MCP Server",
+      "capabilities": {
+        "tools": [
+          "get_figma_design",
+          "extract_components",
+          "generate_drone_code",
+          "figma_to_drone_js_code_system_prompt"
+        ]
+      }
+    },
     "drone-mcp": {
       "url": "https://mcp-drone-js.sg.agoda.is/mcp/",
       "description": "ADS Drone Design System MCP Server",
