@@ -58,6 +58,12 @@ function setupEventListeners() {
     downloadBtn.addEventListener('click', () => downloadAllFrames(window.videoFrames));
     errorCloseBtn.addEventListener('click', hideError);
     
+    // Add event listener for convert another button
+    const convertAnotherBtn = document.getElementById('convertAnotherBtn');
+    if (convertAnotherBtn) {
+        convertAnotherBtn.addEventListener('click', resetConverter);
+    }
+    
     // Video events
     videoPlayer.addEventListener('loadedmetadata', onVideoLoaded);
 }

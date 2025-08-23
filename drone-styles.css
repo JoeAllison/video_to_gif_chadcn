@@ -672,6 +672,26 @@ body {
     margin: var(--drone-space-6) 0;
 }
 
+.output-actions .drone-btn {
+    margin: var(--drone-space-2);
+}
+
+/* Responsive button layout */
+@media (max-width: 768px) {
+    .output-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--drone-space-4);
+    }
+    
+    .output-actions .drone-btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 0;
+    }
+}
+
 /* File Input Styles */
 .file-input {
     display: none;
