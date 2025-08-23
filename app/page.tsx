@@ -56,6 +56,13 @@ export default function VideoToGifConverter() {
     setVideoFile(file)
     const url = URL.createObjectURL(file)
     setVideoUrl(url)
+    
+    // Set the video source so it can load metadata
+    if (videoRef.current) {
+      videoRef.current.src = url
+      videoRef.current.load()
+    }
+    
     setVideoFrames([])
     setProgress(0)
     setShowPreview(false)
@@ -85,6 +92,22 @@ export default function VideoToGifConverter() {
     const ctx = canvas.getContext('2d')
     
     if (!ctx) return
+
+    // Wait for video to be loaded and metadata available
+    if (video.readyState < 2) { // HAVE_CURRENT_DATA
+      video.addEventListener('loadedmetadata', () => {
+        startConversion()
+      })
+      return
+    }
+
+    // Check if duration is available
+    if (!video.duration || isNaN(video.duration)) {
+      console.error('Video duration not available')
+      setIsConverting(false)
+      alert('Unable to read video duration. Please try a different video file.')
+      return
+    }
 
     const frameInterval = 1000 / fps
     const totalFrames = Math.ceil(video.duration * fps)
@@ -233,15 +256,15 @@ export default function VideoToGifConverter() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           
           {/* Hero Section */}
           <section className="text-center mb-12">
             <div className="max-w-3xl mx-auto space-y-6">
-              <h2 className="text-4xl font-bold text-foreground leading-tight">
+              <h2 className="text-4xl font-bold text-foreground leading-tight text-center">
                 Transform Your Videos into Beautiful Animated GIFs
               </h2>
-              <p className="text-xl text-muted-foreground leading-relaxed">
+              <p className="text-xl text-muted-foreground leading-relaxed text-center">
                 Upload any video format and convert it to high-quality animated GIFs with our advanced browser-based converter. 
                 No server uploads, complete privacy, and professional results.
               </p>
@@ -262,113 +285,71 @@ export default function VideoToGifConverter() {
             </div>
           </section>
           
-          {/* Main Converter Section */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-12">
+          {/* Main Converter Section - Single Column Layout */}
+          <div className="space-y-8">
             
-            {/* Left Column - Upload & Preview */}
-            <div className="xl:col-span-2 space-y-8">
-              
-              {/* Upload Section */}
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                <CardHeader className="text-center pb-6">
-                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                    <Upload className="h-10 w-10 text-primary-foreground" />
-                  </div>
-                  <CardTitle className="text-2xl text-foreground">
-                    Upload Your Video
-                  </CardTitle>
-                  <CardDescription className="text-lg text-muted-foreground">
-                    Drag and drop your video file or click to browse
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="px-8 pb-8">
-                  <div
-                    className={cn(
-                      "border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer group",
-                      videoFile 
-                        ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
-                        : 'border-border hover:border-primary/50 hover:bg-accent/50'
-                    )}
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    {videoFile ? (
-                      <div className="space-y-4">
-                        <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                          <CheckCircle className="h-12 w-12 text-white" />
-                        </div>
-                        <h3 className="text-2xl font-semibold text-green-700 dark:text-green-300">
-                          File Selected!
-                        </h3>
-                        <p className="text-foreground font-medium text-lg">{videoFile.name}</p>
-                        <p className="text-muted-foreground">
-                          Click "Start Conversion" to begin processing
-                        </p>
+            {/* Upload Section */}
+            <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
+              <CardContent className="px-12 py-12">
+                <div
+                  className={cn(
+                    "border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer group",
+                    videoFile 
+                      ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
+                      : 'border-border hover:border-primary/50 hover:bg-accent/50'
+                  )}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {videoFile ? (
+                    <div className="space-y-4">
+                      <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                        <CheckCircle className="h-12 w-12 text-white" />
                       </div>
-                    ) : (
-                      <div className="space-y-6">
-                        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
-                          <FileVideo className="h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
-                        </div>
-                        <h3 className="text-2xl font-semibold text-foreground">
-                          Drop your video file here
-                        </h3>
-                        <p className="text-muted-foreground text-lg">
-                          or click to browse
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <Input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) handleFileSelect(file)
-                    }}
-                    className="hidden"
-                  />
-                  
-                  <div className="mt-8 text-center">
-                    <div className="inline-flex items-center space-x-3 bg-muted px-6 py-3 rounded-full">
-                      <Info className="h-5 w-5 text-muted-foreground" />
-                      <span className="text-muted-foreground">
-                        Supports MP4, MOV, AVI, WebM, and other video formats
-                      </span>
+                      <h3 className="text-2xl font-semibold text-green-700 dark:text-green-300">
+                        File Selected!
+                      </h3>
+                      <p className="text-foreground font-medium text-lg">{videoFile.name}</p>
+                      <p className="text-muted-foreground">
+                        Scroll down to configure settings and start conversion
+                      </p>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
+                        <FileVideo className="h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                      <h3 className="text-2xl font-semibold text-foreground">
+                        Upload Your Video
+                      </h3>
+                      <p className="text-muted-foreground text-lg">
+                        Drag and drop your video file or click to browse
+                      </p>
+                      <div className="inline-flex items-center space-x-3 bg-muted px-4 py-2 rounded-full">
+                        <Info className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">
+                          Supports MP4, MOV, AVI, WebM, and other video formats
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                <Input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) handleFileSelect(file)
+                  }}
+                  className="hidden"
+                />
+              </CardContent>
+            </Card>
 
-              {/* Video Preview */}
-              {videoUrl && (
-                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2 text-foreground">
-                      <Monitor className="h-5 w-5" />
-                      <span>Video Preview</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="relative">
-                      <video
-                        ref={videoRef}
-                        src={videoUrl}
-                        controls
-                        className="w-full rounded-xl shadow-lg"
-                      />
-                      <div className="absolute top-4 right-4">
-                        <Badge variant="secondary" className="bg-black/20 text-white backdrop-blur-sm">
-                          {videoFile?.name}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+
 
               {/* Progress Section */}
               {isConverting && (
@@ -488,169 +469,202 @@ export default function VideoToGifConverter() {
               )}
             </div>
 
-            {/* Right Column - Controls & Settings */}
-            <div className="space-y-8">
-              
-              {/* Quick Actions */}
-              {videoFile && (
-                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader>
-                    <CardTitle className="text-foreground">
-                      Quick Actions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
+            {/* Conversion Settings - Only show after file upload */}
+            {videoFile && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+                <CardHeader className="text-center">
+                  <CardTitle className="flex items-center justify-center space-x-2 text-foreground">
+                    <Settings className="h-5 w-5" />
+                    <span>Conversion Settings</span>
+                  </CardTitle>
+                  <CardDescription>
+                    Customize your GIF output with these advanced settings
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  
+                  {/* FPS Control */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground">
+                        Frames per Second (FPS)
+                      </label>
+                      <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+                        {fps} FPS
+                      </Badge>
+                    </div>
+                    <div className="space-y-3">
+                      <Slider
+                        value={[fps]}
+                        onValueChange={(value) => setFps(value[0])}
+                        max={30}
+                        min={1}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>1 FPS</span>
+                        <span>30 FPS</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Higher FPS creates smoother animations but larger file sizes
+                    </p>
+                  </div>
+
+                  <Separator />
+
+                  {/* Quality Control */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-sm font-medium text-foreground">
+                        Image Quality
+                      </label>
+                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300">
+                        {quality}/10
+                      </Badge>
+                    </div>
+                    <div className="space-y-3">
+                      <Slider
+                        value={[quality]}
+                        onValueChange={(value) => setQuality(value[0])}
+                        max={10}
+                        min={1}
+                        step={1}
+                        className="w-full"
+                      />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Low</span>
+                        <span>High</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Higher quality means better image clarity but larger files
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Quick Actions - Only show after file upload */}
+            {videoFile && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-foreground">
+                    Ready to Convert?
+                  </CardTitle>
+                  <CardDescription>
+                    Configure your settings above, then start the conversion process
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button 
+                    onClick={startConversion} 
+                    disabled={isConverting}
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary hover:to-blue-700 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                  >
+                    {isConverting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-3" />
+                        Converting...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="h-5 w-5 mr-3" />
+                        Start Conversion
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={resetConverter}
+                    disabled={isConverting}
+                    size="lg"
+                    className="w-full border-border hover:bg-accent"
+                  >
+                    <RotateCcw className="h-5 w-5 mr-3" />
+                    Choose Different Video
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Progress Section */}
+            {isConverting && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-foreground">
+                    Converting Video
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <Progress value={progress} className="w-full h-4" />
+                  <div className="flex items-center justify-between">
+                    <p className="text-muted-foreground">
+                      Processing frames... {Math.round(progress)}%
+                    </p>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-lg px-4 py-2">
+                      {Math.round(progress)}%
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Output Section */}
+            {showPreview && videoFrames.length > 0 && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+                <CardHeader className="text-center">
+                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                    <CheckCircle className="h-10 w-10 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl text-foreground">
+                    Conversion Complete!
+                  </CardTitle>
+                  <CardDescription className="text-lg text-muted-foreground">
+                    Your video has been converted to {videoFrames.length} frames
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  <div className="text-center">
+                    <div className="relative inline-block">
+                      <img
+                        src={videoFrames[currentFrame]?.dataUrl}
+                        alt="Animated GIF Preview"
+                        className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <Button 
-                      onClick={startConversion} 
-                      disabled={isConverting}
+                      onClick={downloadGif} 
                       size="lg"
-                      className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary hover:to-blue-700 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                      data-download-button
+                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                     >
-                      {isConverting ? (
-                        <>
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-3" />
-                          Converting...
-                        </>
-                      ) : (
-                        <>
-                          <Play className="h-5 w-5 mr-3" />
-                          Start Conversion
-                        </>
-                      )}
+                      <Download className="h-5 w-5 mr-3" />
+                      <span data-download-text>Download GIF</span>
                     </Button>
                     <Button 
                       variant="outline" 
                       onClick={resetConverter}
-                      disabled={isConverting}
                       size="lg"
-                      className="w-full border-border hover:bg-accent"
+                      className="border-border hover:bg-accent"
                     >
                       <RotateCcw className="h-5 w-5 mr-3" />
-                      Reset
+                      Convert Another Video
                     </Button>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Conversion Settings */}
-              {videoFile && (
-                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2 text-foreground">
-                      <Settings className="h-5 w-5" />
-                      <span>Conversion Settings</span>
-                    </CardTitle>
-                    <CardDescription>
-                      Customize your GIF output with these advanced settings
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-8">
-                    
-                    {/* FPS Control */}
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <label className="text-sm font-medium text-foreground">
-                          Frames per Second (FPS)
-                        </label>
-                        <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
-                          {fps} FPS
-                        </Badge>
-                      </div>
-                      <div className="space-y-3">
-                        <Slider
-                          value={[fps]}
-                          onValueChange={(value) => setFps(value[0])}
-                          max={30}
-                          min={1}
-                          step={1}
-                          className="w-full"
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>1 FPS</span>
-                          <span>30 FPS</span>
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Higher FPS creates smoother animations but larger file sizes
-                      </p>
-                    </div>
-
-                    <Separator />
-
-                    {/* Quality Control */}
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <label className="text-sm font-medium text-foreground">
-                          Image Quality
-                        </label>
-                        <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300">
-                          {quality}/10
-                        </Badge>
-                      </div>
-                      <div className="space-y-3">
-                        <Slider
-                          value={[quality]}
-                          onValueChange={(value) => setQuality(value[0])}
-                          max={10}
-                          min={1}
-                          step={1}
-                          className="w-full"
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>Low</span>
-                          <span>High</span>
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Higher quality means better image clarity but larger files
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Info Panel */}
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                <CardHeader>
-                  <CardTitle className="text-foreground">
-                    How It Works
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-primary-foreground font-bold">1</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Upload your video file in any supported format
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-primary-foreground font-bold">2</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Adjust FPS and quality settings to your preference
-                      </p>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-primary-foreground font-bold">3</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Start conversion and download your animated GIF
-                      </p>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
+            )}
         </div>
       </main>
 
-      {/* Hidden canvas for frame capture */}
+      {/* Hidden video and canvas for frame capture */}
+      <video ref={videoRef} className="hidden" />
       <canvas ref={canvasRef} className="hidden" />
     </div>
   )
