@@ -73,3 +73,8 @@ logs
 # Test files (keep the main ones but exclude debug versions)
 test-gif*.html
 debug-gif.html
+
+# Drone MCP Configuration (optional - remove if you want to commit these)
+# drone-config.js
+# drone-integration.js
+# mcp-config.json

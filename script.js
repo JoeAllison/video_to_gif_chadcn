@@ -891,14 +891,16 @@ function resetConverter() {
 // Show a specific section
 function showSection(section) {
     if (section) {
-        section.style.display = 'block';
+        section.classList.remove('hidden');
+        section.classList.add('fade-in');
     }
 }
 
 // Hide a specific section
 function hideSection(section) {
     if (section) {
-        section.style.display = 'none';
+        section.classList.add('hidden');
+        section.classList.remove('fade-in');
     }
 }
 

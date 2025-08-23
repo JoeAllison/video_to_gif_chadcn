@@ -3,115 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP4 to GIF Converter</title>
+    <title>MP4 to GIF Converter - Professional Video Processing</title>
+    <meta name="description" content="Convert MP4 videos to animated GIFs with professional quality and modern design">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1><i class="fas fa-film"></i> MP4 to GIF Converter</h1>
-            <p>Convert your MP4 videos to animated GIFs directly in your browser</p>
-        </header>
-
-        <main class="main-content">
-            <!-- Upload Section -->
-            <div class="upload-section">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-video"></i>
                     </div>
-                    <h3>Drop your MP4 file here</h3>
-                    <p>or click to browse</p>
-                    <input type="file" id="fileInput" accept="video/mp4,video/*" style="display: none;">
+                    <span>MP4 to GIF</span>
+                </div>
+                <div class="header-actions">
+                    <span class="version">v2.0</span>
                 </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Video Preview Section -->
-            <div class="video-section" id="videoSection" style="display: none;">
-                <h3>Video Preview</h3>
-                <div class="video-container">
-                    <video id="videoPreview" controls></video>
-                </div>
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="content-grid">
                 
-                <!-- Conversion Controls -->
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="fpsSlider">
-                            <i class="fas fa-tachometer-alt"></i> Frames per Second
-                        </label>
-                        <div class="slider-container">
-                            <input type="range" id="fpsSlider" min="1" max="30" value="10" class="slider">
-                            <span class="value-display" id="fpsValue">10</span>
+                <!-- Upload Section -->
+                <div class="card fade-in">
+                    <div class="card-header">
+                        <h2><i class="fas fa-cloud-upload-alt"></i> Upload Your Video</h2>
+                        <p>Drag and drop your MP4 file or click to browse</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="upload-text">
+                                <h3>Drop your MP4 file here</h3>
+                                <p>or click to browse</p>
+                            </div>
+                            <input type="file" id="fileInput" accept="video/mp4,video/*" class="file-input">
                         </div>
                     </div>
+                </div>
 
-                    <div class="control-group">
-                        <label for="scaleSlider">
-                            <i class="fas fa-expand-arrows-alt"></i> Width (pixels)
-                        </label>
-                        <div class="slider-container">
-                            <input type="range" id="scaleSlider" min="100" max="800" value="400" step="50" class="slider">
-                            <span class="value-display" id="scaleValue">400</span>
+                <!-- Video Preview Section -->
+                <div class="card video-section hidden" id="videoSection">
+                    <div class="card-header">
+                        <h3><i class="fas fa-play-circle"></i> Video Preview</h3>
+                        <p>Review your video before conversion</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="video-container">
+                            <video id="videoPreview" controls class="video-preview"></video>
+                        </div>
+                        
+                        <!-- Conversion Controls -->
+                        <div class="controls">
+                            <div class="control-group">
+                                <label for="fpsSlider" class="control-label">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    Frames per Second
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" id="fpsSlider" min="1" max="30" value="10" class="slider">
+                                    <span class="value-display" id="fpsValue">10</span>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="scaleSlider" class="control-label">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                    Width (pixels)
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" id="scaleSlider" min="100" max="800" value="400" step="50" class="slider">
+                                    <span class="value-display" id="scaleValue">400</span>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="qualitySlider" class="control-label">
+                                    <i class="fas fa-star"></i>
+                                    Quality
+                                </label>
+                                <div class="slider-container">
+                                    <input type="range" id="qualitySlider" min="1" max="10" value="7" class="slider">
+                                    <span class="value-display" id="qualityValue">7</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button class="btn btn-primary btn-lg" id="convertBtn" onclick="convertToGif()">
+                                <i class="fas fa-magic btn-icon"></i>
+                                Convert to GIF
+                            </button>
                         </div>
                     </div>
+                </div>
 
-                    <div class="control-group">
-                        <label for="qualitySlider">
-                            <i class="fas fa-star"></i> Quality
-                        </label>
-                        <div class="slider-container">
-                            <input type="range" id="qualitySlider" min="1" max="10" value="7" class="slider">
-                            <span class="value-display" id="qualityValue">7</span>
+                <!-- Progress Section -->
+                <div class="card progress-section hidden" id="progressSection">
+                    <div class="card-body">
+                        <h3><i class="fas fa-cogs"></i> Processing Your Video</h3>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p id="progressText" class="progress-text">Processing frames...</p>
+                    </div>
+                </div>
+
+                <!-- Output Section -->
+                <div class="card output-section hidden" id="outputSection">
+                    <div class="card-header">
+                        <h3><i class="fas fa-check-circle"></i> Your Animated Content is Ready!</h3>
+                        <p>Download your GIF or convert another video</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="gif-container">
+                            <img id="gifOutput" alt="Animated Content" class="gif-output">
                         </div>
                     </div>
-
-                    <button class="convert-btn" id="convertBtn" onclick="convertToGif()">
-                        <i class="fas fa-magic"></i> Convert to GIF
-                    </button>
+                    <div class="card-footer">
+                        <div class="output-actions">
+                            <button class="btn btn-success btn-lg" id="downloadBtn">
+                                <i class="fas fa-download btn-icon"></i>
+                                Download Animated GIF
+                            </button>
+                            <button class="btn btn-secondary btn-lg" onclick="resetConverter()">
+                                <i class="fas fa-redo btn-icon"></i>
+                                Convert Another
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Progress Section -->
-            <div class="progress-section" id="progressSection" style="display: none;">
-                <h3>Converting...</h3>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+                <!-- Error Section -->
+                <div class="card error-section hidden" id="errorSection">
+                    <div class="card-body">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Something went wrong</h3>
+                        <p id="errorMessage">An error occurred during processing</p>
+                        <div class="text-center mt-6">
+                            <button class="btn btn-secondary" onclick="resetConverter()">
+                                <i class="fas fa-redo btn-icon"></i>
+                                Try Again
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <p id="progressText">Processing frames...</p>
-            </div>
 
-            <!-- Animated Output Section -->
-            <div class="output-section" id="outputSection" style="display: none;">
-                <h3>Your Animated Content is Ready!</h3>
-                <div class="gif-container">
-                    <img id="gifOutput" alt="Animated Content">
-                </div>
-                <div class="output-actions">
-                    <button class="download-btn" id="downloadBtn">
-                        <i class="fas fa-download"></i> Download Animated GIF
-                    </button>
-                    <button class="reset-btn" onclick="resetConverter()">
-                        <i class="fas fa-redo"></i> Convert Another
-                    </button>
-                </div>
             </div>
+        </div>
+    </main>
 
-            <!-- Error Section -->
-            <div class="error-section" id="errorSection" style="display: none;">
-                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
-                <p id="errorMessage"></p>
-                <button class="reset-btn" onclick="resetConverter()">
-                    <i class="fas fa-redo"></i> Try Again
-                </button>
-            </div>
-        </main>
-
-        <footer class="footer">
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
             <p>Made with <i class="fas fa-heart"></i> - No files are uploaded to any server</p>
-        </footer>
-    </div>
+        </div>
+    </footer>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
     <script>
         // Configure GIF.js to use the local worker file

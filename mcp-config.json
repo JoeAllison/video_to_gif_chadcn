@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "drone-mcp": {
+      "url": "https://mcp-drone-js.sg.agoda.is/mcp/",
+      "description": "ADS Drone Design System MCP Server",
+      "capabilities": {
+        "tools": [
+          "get_design_tokens",
+          "get_component_specs",
+          "generate_component_code",
+          "validate_design_system"
+        ]
+      },
+      "authentication": {
+        "type": "api_key",
+        "header": "Authorization",
+        "value": "Bearer YOUR_API_KEY_HERE"
+      },
+      "settings": {
+        "timeout": 30000,
+        "retryAttempts": 3,
+        "cacheEnabled": true
+      }
+    }
+  }
+}
