@@ -134,8 +134,21 @@ function handleFile(file) {
             <h3 class="drone-text--lg drone-text--semibold drone-text--success drone-m-4">File Selected!</h3>
             <p class="drone-text--base drone-text--neutral drone-m-0">${file.name}</p>
             <p class="drone-text--sm drone-text--neutral drone-m-2">Click "Start Conversion" to begin</p>
+            <div class="drone-m-4" style="opacity: 0.7;">
+                <i class="fas fa-chevron-down drone-text--primary" style="font-size: 1.5rem; animation: bounce 2s infinite;"></i>
+                <p class="drone-text--sm drone-text--neutral drone-m-1">Scroll down for more options</p>
+            </div>
         </div>
     `;
+    
+    // Smooth scroll to video preview section
+    setTimeout(() => {
+        videoSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+        });
+    }, 300); // Small delay to ensure DOM is updated
     
     logInfo('Video file loaded', { name: file.name, size: file.size, type: file.type });
 }
