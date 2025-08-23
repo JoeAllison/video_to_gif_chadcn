@@ -749,3 +749,36 @@ body {
         font-size: var(--drone-font-size-lg);
     }
 }
+
+/* Agoda Logo Styles */
+.agoda-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--drone-transition-normal);
+}
+
+.agoda-logo svg {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: all var(--drone-transition-normal);
+}
+
+.agoda-logo:hover svg {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+    transform: scale(1.05);
+}
+
+/* Responsive logo sizing */
+@media (max-width: 768px) {
+    .agoda-logo svg {
+        width: 100px;
+        height: 27px;
+    }
+}
+
+@media (max-width: 480px) {
+    .agoda-logo svg {
+        width: 80px;
+        height: 22px;
+    }
+}
