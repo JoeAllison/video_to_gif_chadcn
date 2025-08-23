@@ -1,6 +1,8 @@
-# Video to GIF Converter - ShadCN Version
+# MP4 to GIF Converter
 
-A modern, browser-based video to GIF converter built with **Next.js 14** and **ShadCN UI**. Convert your videos to animated GIFs with a beautiful, responsive interface.
+A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.
+
+<!-- Force Vercel to use latest commit with fixed dependencies -->
 
 ## ✨ Features
 
