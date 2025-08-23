@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP4 to GIF Converter</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-film"></i> MP4 to GIF Converter</h1>
+            <p>Convert your MP4 videos to animated GIFs directly in your browser</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Drop your MP4 file here</h3>
+                    <p>or click to browse</p>
+                    <input type="file" id="fileInput" accept="video/mp4,video/*" style="display: none;">
+                </div>
+            </div>
+
+            <!-- Video Preview Section -->
+            <div class="video-section" id="videoSection" style="display: none;">
+                <h3>Video Preview</h3>
+                <div class="video-container">
+                    <video id="videoPreview" controls></video>
+                </div>
+                
+                <!-- Conversion Controls -->
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="fpsSlider">
+                            <i class="fas fa-tachometer-alt"></i> Frames per Second
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="fpsSlider" min="1" max="30" value="10" class="slider">
+                            <span class="value-display" id="fpsValue">10</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="scaleSlider">
+                            <i class="fas fa-expand-arrows-alt"></i> Width (pixels)
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="scaleSlider" min="100" max="800" value="400" step="50" class="slider">
+                            <span class="value-display" id="scaleValue">400</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="qualitySlider">
+                            <i class="fas fa-star"></i> Quality
+                        </label>
+                        <div class="slider-container">
+                            <input type="range" id="qualitySlider" min="1" max="10" value="7" class="slider">
+                            <span class="value-display" id="qualityValue">7</span>
+                        </div>
+                    </div>
+
+                    <button class="convert-btn" id="convertBtn" onclick="convertToGif()">
+                        <i class="fas fa-magic"></i> Convert to GIF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <h3>Converting...</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p id="progressText">Processing frames...</p>
+            </div>
+
+            <!-- Animated Output Section -->
+            <div class="output-section" id="outputSection" style="display: none;">
+                <h3>Your Animated Content is Ready!</h3>
+                <div class="gif-container">
+                    <img id="gifOutput" alt="Animated Content">
+                </div>
+                <div class="output-actions">
+                    <button class="download-btn" id="downloadBtn">
+                        <i class="fas fa-download"></i> Download Animated GIF
+                    </button>
+                    <button class="reset-btn" onclick="resetConverter()">
+                        <i class="fas fa-redo"></i> Convert Another
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div class="error-section" id="errorSection" style="display: none;">
+                <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+                <p id="errorMessage"></p>
+                <button class="reset-btn" onclick="resetConverter()">
+                    <i class="fas fa-redo"></i> Try Again
+                </button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Made with <i class="fas fa-heart"></i> - No files are uploaded to any server</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+    <script>
+        // Configure GIF.js to use the local worker file
+        window.GIF_WORKER_PATH = 'gif.worker.js';
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
