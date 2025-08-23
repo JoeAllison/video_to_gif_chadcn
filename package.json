@@ -2,7 +2,6 @@
   "name": "mp4-to-gif-converter",
   "version": "1.0.0",
   "description": "A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.",
-
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,6 +23,7 @@
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-slider": "^1.3.6",
     "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.541.0",

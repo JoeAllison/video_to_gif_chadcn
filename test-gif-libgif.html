@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Test with libgif</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .output { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        .frames { display: flex; gap: 10px; margin: 20px 0; }
+        .frame { border: 1px solid #ccc; padding: 5px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>GIF Test with libgif</h1>
+    <button onclick="testLibGif()">Test libgif</button>
+    <button onclick="testCanvasGif()">Test Canvas Method</button>
+    <div id="output"></div>
+
+    <script>
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const entry = document.createElement('div');
+            entry.className = 'output';
+            entry.innerHTML = `<strong>${message}</strong>`;
+            if (data) {
+                entry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            output.appendChild(entry);
+            console.log(message, data);
+        }
+
+        function testLibGif() {
+            log('Testing with libgif library...');
+            
+            // Try to load libgif
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/libgif@1.0.0/dist/libgif.js';
+            script.onload = function() {
+                log('libgif loaded, testing...');
+                createLibGif();
+            };
+            script.onerror = function() {
+                log('Failed to load libgif, trying alternative...');
+                testCanvasGif();
+            };
+            document.head.appendChild(script);
+        }
+
+        function createLibGif() {
+            try {
+                if (typeof SuperGif === 'undefined') {
+                    log('ERROR: libgif not available');
+                    return;
+                }
+
+                log('Creating GIF with libgif...');
+                
+                // Create a simple animated GIF using a different approach
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 100;
+                canvas.height = 100;
+
+                // Create frames
+                const frames = [];
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    // Different colors and positions
+                    ctx.fillStyle = `hsl(${i * 72}, 70%, 50%)`;
+                    ctx.fillRect(20 + i * 10, 20 + i * 5, 60 - i * 10, 60 - i * 10);
+                    
+                    frames.push(canvas.toDataURL());
+                }
+
+                log('Frames created, testing animation...');
+                
+                // Show frames in sequence to verify they're different
+                const frameContainer = document.createElement('div');
+                frameContainer.className = 'frames';
+                frames.forEach((frame, i) => {
+                    const frameDiv = document.createElement('div');
+                    frameDiv.className = 'frame';
+                    frameDiv.innerHTML = `
+                        <img src="${frame}" alt="Frame ${i + 1}" width="80" height="80">
+                        <div>Frame ${i + 1}</div>
+                    `;
+                    frameContainer.appendChild(frameDiv);
+                });
+                document.getElementById('output').appendChild(frameContainer);
+
+                log('Frame sequence displayed. If you see different colored squares above, frames are working.');
+                
+            } catch (error) {
+                log('ERROR creating libgif', error);
+            }
+        }
+
+        function testCanvasGif() {
+            log('Testing Canvas-based GIF creation...');
+            
+            // Create a simple animation using canvas and download as multiple images
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+
+            const frames = [];
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 100, 100);
+                
+                // Different colors and positions
+                ctx.fillStyle = `hsl(${i * 72}, 70%, 50%)`;
+                ctx.fillRect(20 + i * 10, 20 + i * 5, 60 - i * 10, 60 - i * 10);
+                
+                frames.push(canvas.toDataURL());
+            }
+
+            log('Canvas frames created. Creating animated sequence...');
+            
+            // Create an animated sequence using JavaScript
+            let currentFrame = 0;
+            const animationContainer = document.createElement('div');
+            animationContainer.style.textAlign = 'center';
+            animationContainer.style.margin = '20px';
+            
+            const animatedImg = document.createElement('img');
+            animatedImg.src = frames[0];
+            animatedImg.style.border = '2px solid blue';
+            animatedImg.style.width = '200px';
+            animatedImg.style.height = '200px';
+            
+            animationContainer.appendChild(animatedImg);
+            document.getElementById('output').appendChild(animationContainer);
+
+            // Animate the frames
+            const interval = setInterval(() => {
+                currentFrame = (currentFrame + 1) % frames.length;
+                animatedImg.src = frames[currentFrame];
+            }, 500);
+
+            log('Animation started! The image above should be cycling through different colors every 500ms.');
+            log('This proves the frames are working. The issue is with GIF.js not creating animated GIFs.');
+            
+            // Add download buttons for individual frames
+            const downloadContainer = document.createElement('div');
+            downloadContainer.style.margin = '20px';
+            downloadContainer.innerHTML = '<h3>Download Individual Frames:</h3>';
+            
+            frames.forEach((frame, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `Download Frame ${i + 1}`;
+                btn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = frame;
+                    a.download = `frame-${i + 1}.png`;
+                    a.click();
+                };
+                downloadContainer.appendChild(btn);
+            });
+            
+            document.getElementById('output').appendChild(downloadContainer);
+        }
+    </script>
+</body>
+</html>

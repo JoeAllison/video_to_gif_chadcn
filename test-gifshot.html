@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Test with gifshot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .output { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        .frames { display: flex; gap: 10px; margin: 20px 0; }
+        .frame { border: 1px solid #ccc; padding: 5px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>GIF Test with gifshot</h1>
+    <button onclick="testGifshot()">Test gifshot</button>
+    <button onclick="testGifshotAdvanced()">Test Advanced gifshot</button>
+    <div id="output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gifshot@0.3.7/build/gifshot.js"></script>
+    <script>
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const entry = document.createElement('div');
+            entry.className = 'output';
+            entry.innerHTML = `<strong>${message}</strong>`;
+            if (data) {
+                entry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            output.appendChild(entry);
+            console.log(message, data);
+        }
+
+        function testGifshot() {
+            log('Testing with gifshot library...');
+            
+            try {
+                if (typeof gifshot === 'undefined') {
+                    log('ERROR: gifshot library not loaded!');
+                    return;
+                }
+                
+                log('✓ gifshot library loaded successfully');
+                
+                // Create frames using canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 100;
+                canvas.height = 100;
+                
+                const frames = [];
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    // Different colors and positions
+                    ctx.fillStyle = `hsl(${i * 72}, 70%, 50%)`;
+                    ctx.fillRect(20 + i * 10, 20 + i * 5, 60 - i * 10, 60 - i * 10);
+                    
+                    frames.push(canvas.toDataURL());
+                }
+                
+                log('✓ Frames created', { frameCount: frames.length });
+                
+                // Show frame previews
+                const frameContainer = document.createElement('div');
+                frameContainer.className = 'frames';
+                frames.forEach((frame, i) => {
+                    const frameDiv = document.createElement('div');
+                    frameDiv.className = 'frame';
+                    frameDiv.innerHTML = `
+                        <img src="${frame}" alt="Frame ${i + 1}" width="80" height="80">
+                        <div>Frame ${i + 1}</div>
+                    `;
+                    frameContainer.appendChild(frameDiv);
+                });
+                document.getElementById('output').appendChild(frameContainer);
+                
+                log('Starting GIF creation with gifshot...');
+                
+                // Create GIF using gifshot
+                gifshot.createGIF({
+                    images: frames,
+                    gifWidth: 100,
+                    gifHeight: 100,
+                    frameDuration: 0.5, // 500ms per frame
+                    progressCallback: function(captureProgress) {
+                        log('GIF creation progress', { progress: captureProgress });
+                    }
+                }, function(obj) {
+                    if (obj.error) {
+                        log('ERROR in gifshot', obj.error);
+                        return;
+                    }
+                    
+                    log('✓ GIF created successfully!', {
+                        size: obj.image.length,
+                        frameCount: frames.length
+                    });
+                    
+                    // Display the GIF
+                    const gifImg = document.createElement('img');
+                    gifImg.src = obj.image;
+                    gifImg.style.border = '2px solid green';
+                    gifImg.style.margin = '10px';
+                    document.getElementById('output').appendChild(gifImg);
+                    
+                    // Add download button
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Download gifshot GIF';
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = obj.image;
+                        a.download = 'gifshot-test.gif';
+                        a.click();
+                    };
+                    document.getElementById('output').appendChild(downloadBtn);
+                });
+                
+            } catch (error) {
+                log('ERROR during gifshot test', error);
+            }
+        }
+
+        function testGifshotAdvanced() {
+            log('Testing advanced gifshot with video-like frames...');
+            
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 200;
+                canvas.height = 200;
+                
+                const frames = [];
+                // Create more frames for smoother animation
+                for (let i = 0; i < 10; i++) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 200, 200);
+                    
+                    // Create a moving circle
+                    const angle = (i / 10) * Math.PI * 2;
+                    const x = 100 + Math.cos(angle) * 50;
+                    const y = 100 + Math.sin(angle) * 50;
+                    
+                    ctx.fillStyle = `hsl(${i * 36}, 70%, 50%)`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    frames.push(canvas.toDataURL());
+                }
+                
+                log('✓ Advanced frames created', { frameCount: frames.length });
+                
+                gifshot.createGIF({
+                    images: frames,
+                    gifWidth: 200,
+                    gifHeight: 200,
+                    frameDuration: 0.2, // 200ms per frame
+                    numFrames: 10,
+                    progressCallback: function(captureProgress) {
+                        log('Advanced GIF progress', { progress: captureProgress });
+                    }
+                }, function(obj) {
+                    if (obj.error) {
+                        log('ERROR in advanced gifshot', obj.error);
+                        return;
+                    }
+                    
+                    log('✓ Advanced GIF created!', {
+                        size: obj.image.length,
+                        frameCount: frames.length
+                    });
+                    
+                    const gifImg = document.createElement('img');
+                    gifImg.src = obj.image;
+                    gifImg.style.border = '2px solid blue';
+                    gifImg.style.margin = '10px';
+                    document.getElementById('output').appendChild(gifImg);
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Download Advanced GIF';
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = obj.image;
+                        a.download = 'advanced-gifshot.gif';
+                        a.click();
+                    };
+                    document.getElementById('output').appendChild(downloadBtn);
+                });
+                
+            } catch (error) {
+                log('ERROR in advanced gifshot test', error);
+            }
+        }
+    </script>
+</body>
+</html>

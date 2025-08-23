@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-info { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .frame-preview { display: inline-block; margin: 5px; border: 1px solid #ccc; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        #output { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>GIF Debug Test</h1>
+    <button onclick="testStepByStep()">Test Step by Step</button>
+    <button onclick="testSimpleAnimation()">Test Simple Animation</button>
+    <button onclick="clearOutput()">Clear Output</button>
+    
+    <div id="output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+    <script>
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'debug-info';
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            if (data) {
+                logEntry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            output.appendChild(logEntry);
+            console.log(message, data);
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+        }
+
+        function testStepByStep() {
+            clearOutput();
+            log('Starting step-by-step GIF test...');
+            
+            try {
+                // Step 1: Check if GIF library is loaded
+                if (typeof GIF === 'undefined') {
+                    log('ERROR: GIF library not loaded!');
+                    return;
+                }
+                log('✓ GIF library loaded successfully');
+                
+                // Step 2: Create GIF object
+                const gif = new GIF({
+                    workers: 1,
+                    quality: 10,
+                    width: 100,
+                    height: 100,
+                    workerScript: 'gif.worker.js',
+                    debug: true
+                });
+                log('✓ GIF object created', gif);
+                
+                // Step 3: Create canvas and test frames
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 100;
+                canvas.height = 100;
+                
+                // Step 4: Add frames with very different content
+                const frames = [];
+                for (let i = 0; i < 5; i++) {
+                    // Clear canvas
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    // Draw completely different content for each frame
+                    ctx.fillStyle = `rgb(${i * 50}, ${100 + i * 30}, ${150 - i * 20})`;
+                    ctx.fillRect(10 + i * 15, 10 + i * 10, 80 - i * 15, 80 - i * 10);
+                    
+                    // Add text to make frames more distinct
+                    ctx.fillStyle = 'black';
+                    ctx.font = '16px Arial';
+                    ctx.fillText(`Frame ${i + 1}`, 20, 60);
+                    
+                    // Convert to data URL for preview
+                    const frameDataUrl = canvas.toDataURL();
+                    frames.push(frameDataUrl);
+                    
+                    // Add frame to GIF with longer delay
+                    const delay = 500; // 500ms delay
+                    log(`Adding frame ${i + 1} with delay ${delay}ms`);
+                    gif.addFrame(canvas, { delay: delay });
+                    
+                    // Show frame preview
+                    const preview = document.createElement('img');
+                    preview.src = frameDataUrl;
+                    preview.className = 'frame-preview';
+                    preview.title = `Frame ${i + 1}`;
+                    document.getElementById('output').appendChild(preview);
+                }
+                
+                log('✓ All frames added', { frameCount: gif.frames.length, frames: gif.frames });
+                
+                // Step 5: Set up event handlers
+                gif.on('finished', function(blob) {
+                    log('✓ GIF generation finished!', {
+                        blobSize: blob.size,
+                        blobType: blob.type,
+                        frameCount: gif.frames.length
+                    });
+                    
+                    // Display the generated GIF
+                    const url = URL.createObjectURL(blob);
+                    const gifImg = document.createElement('img');
+                    gifImg.src = url;
+                    gifImg.style.border = '2px solid green';
+                    gifImg.style.margin = '10px';
+                    document.getElementById('output').appendChild(gifImg);
+                    
+                    // Add download button
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = 'Download Debug GIF';
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'debug-test.gif';
+                        a.click();
+                    };
+                    document.getElementById('output').appendChild(downloadBtn);
+                });
+                
+                gif.on('progress', function(p) {
+                    log('GIF progress', { progress: p });
+                });
+                
+                gif.on('error', function(error) {
+                    log('ERROR in GIF generation', error);
+                });
+                
+                // Step 6: Start rendering
+                log('Starting GIF render...');
+                gif.render();
+                
+            } catch (error) {
+                log('ERROR during test', error);
+            }
+        }
+
+        function testSimpleAnimation() {
+            clearOutput();
+            log('Testing simple animation with minimal settings...');
+            
+            try {
+                const gif = new GIF({
+                    workers: 1,
+                    quality: 1,
+                    width: 50,
+                    height: 50,
+                    workerScript: 'gif.worker.js'
+                });
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 50;
+                canvas.height = 50;
+                
+                // Create just 3 very simple, very different frames
+                for (let i = 0; i < 3; i++) {
+                    // Clear
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 50, 50);
+                    
+                    // Draw different colored squares
+                    if (i === 0) {
+                        ctx.fillStyle = 'red';
+                        ctx.fillRect(10, 10, 30, 30);
+                    } else if (i === 1) {
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(15, 15, 20, 20);
+                    } else {
+                        ctx.fillStyle = 'green';
+                        ctx.fillRect(20, 20, 10, 10);
+                    }
+                    
+                    gif.addFrame(canvas, { delay: 1000 }); // 1 second delay
+                }
+                
+                gif.on('finished', function(blob) {
+                    log('Simple GIF finished', { size: blob.size, type: blob.type });
+                    const url = URL.createObjectURL(blob);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.border = '2px solid blue';
+                    document.getElementById('output').appendChild(img);
+                });
+                
+                gif.render();
+                
+            } catch (error) {
+                log('ERROR in simple test', error);
+            }
+        }
+    </script>
+</body>
+</html>

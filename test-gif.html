@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Test</title>
+</head>
+<body>
+    <h1>GIF Generation Test</h1>
+    <button onclick="testGif()">Test GIF Generation</button>
+    <div id="output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+    <script>
+        function testGif() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Generating test GIF...';
+            
+            // Create a simple animated GIF with colored rectangles
+            const gif = new GIF({
+                workers: 1,
+                quality: 10,
+                width: 200,
+                height: 200,
+                workerScript: 'gif.worker.js',
+                repeat: 0,
+                globalPalette: false,
+                debug: true
+            });
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 200;
+            
+            console.log('Starting GIF generation...');
+            console.log('GIF object:', gif);
+            
+            // Add frames with different colors and positions
+            for (let i = 0; i < 10; i++) {
+                // Clear canvas
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 200, 200);
+                
+                // Draw colored rectangle with different position each time
+                ctx.fillStyle = `hsl(${i * 36}, 70%, 50%)`;
+                const x = 20 + (i * 15);
+                const y = 20 + (i * 10);
+                const size = 80 - (i * 5);
+                ctx.fillRect(x, y, size, size);
+                
+                // Add frame with 300ms delay (longer delay for more visible animation)
+                const frameDelay = 300;
+                console.log(`Adding frame ${i + 1} with delay ${frameDelay}ms`);
+                gif.addFrame(canvas, { delay: frameDelay });
+            }
+            
+            console.log('All frames added, starting render...');
+            
+            gif.on('finished', function(blob) {
+                console.log('GIF finished!', blob);
+                console.log('GIF frames:', gif.frames);
+                const url = URL.createObjectURL(blob);
+                output.innerHTML = `
+                    <h3>Test GIF Generated!</h3>
+                    <p>Size: ${blob.size} bytes</p>
+                    <p>Frames: ${gif.frames.length}</p>
+                    <p>Type: ${blob.type}</p>
+                    <img src="${url}" alt="Test GIF" style="border: 1px solid #ccc;">
+                    <br><br>
+                    <button onclick="downloadTestGif('${url}')">Download Test GIF</button>
+                `;
+            });
+            
+            gif.on('progress', function(p) {
+                console.log('GIF progress:', p);
+            });
+            
+            gif.render();
+        }
+        
+        function downloadTestGif(url) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'test-animation.gif';
+            a.click();
+        }
+    </script>
+</body>
+</html>

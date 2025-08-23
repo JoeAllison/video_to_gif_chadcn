@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final GIF Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .output { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        .frames { display: flex; gap: 10px; margin: 20px 0; }
+        .frame { border: 1px solid #ccc; padding: 5px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Final GIF Test - Multiple Approaches</h1>
+    <button onclick="testGifJsUnpkg()">Test GIF.js from unpkg</button>
+    <button onclick="testGifJsLocal()">Test GIF.js Local</button>
+    <button onclick="testGifJsDirect()">Test GIF.js Direct</button>
+    <div id="output"></div>
+
+    <script>
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const entry = document.createElement('div');
+            entry.className = 'output';
+            entry.innerHTML = `<strong>${message}</strong>`;
+            if (data) {
+                entry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            output.appendChild(entry);
+            console.log(message, data);
+        }
+
+        function testGifJsUnpkg() {
+            log('Testing GIF.js from unpkg CDN...');
+            
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/gif.js@0.2.0/dist/gif.js';
+            script.onload = function() {
+                log('✓ GIF.js loaded from unpkg, testing...');
+                createGifWithLibrary('unpkg');
+            };
+            script.onerror = function() {
+                log('✗ Failed to load from unpkg');
+            };
+            document.head.appendChild(script);
+        }
+
+        function testGifJsLocal() {
+            log('Testing GIF.js with local files...');
+            
+            // Try to load the local GIF.js if it exists
+            const script = document.createElement('script');
+            script.src = 'gif.js';
+            script.onload = function() {
+                log('✓ Local GIF.js loaded, testing...');
+                createGifWithLibrary('local');
+            };
+            script.onerror = function() {
+                log('✗ Local GIF.js not found, trying direct approach...');
+                testGifJsDirect();
+            };
+            document.head.appendChild(script);
+        }
+
+        function testGifJsDirect() {
+            log('Testing direct GIF creation approach...');
+            
+            // Create frames first
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+
+            const frames = [];
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 100, 100);
+                
+                // Different colors and positions
+                ctx.fillStyle = `hsl(${i * 72}, 70%, 50%)`;
+                ctx.fillRect(20 + i * 10, 20 + i * 5, 60 - i * 10, 60 - i * 10);
+                
+                frames.push(canvas.toDataURL());
+            }
+
+            log('✓ Frames created', { frameCount: frames.length });
+            
+            // Try to create GIF using any available method
+            if (typeof GIF !== 'undefined') {
+                log('GIF library available, attempting creation...');
+                createGifWithLibrary('available');
+            } else {
+                log('No GIF library available, creating animated preview...');
+                createAnimatedPreview(frames);
+            }
+        }
+
+        function createGifWithLibrary(source) {
+            try {
+                if (typeof GIF === 'undefined') {
+                    log('ERROR: GIF library still not available');
+                    return;
+                }
+
+                log(`Creating GIF with ${source} library...`);
+                
+                const gif = new GIF({
+                    workers: 1,
+                    quality: 10,
+                    width: 100,
+                    height: 100,
+                    workerScript: 'gif.worker.js',
+                    repeat: 0,
+                    globalPalette: false,
+                    debug: true
+                });
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 100;
+                canvas.height = 100;
+
+                // Create very distinct frames
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    // Completely different content for each frame
+                    if (i === 0) {
+                        ctx.fillStyle = 'red';
+                        ctx.fillRect(10, 10, 80, 80);
+                    } else if (i === 1) {
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(20, 20, 60, 60);
+                    } else if (i === 2) {
+                        ctx.fillStyle = 'green';
+                        ctx.fillRect(30, 30, 40, 40);
+                    } else if (i === 3) {
+                        ctx.fillStyle = 'purple';
+                        ctx.fillRect(40, 40, 20, 20);
+                    } else {
+                        ctx.fillStyle = 'orange';
+                        ctx.fillRect(45, 45, 10, 10);
+                    }
+                    
+                    gif.addFrame(canvas, { delay: 500 });
+                }
+
+                log('✓ Frames added to GIF object');
+
+                gif.on('finished', function(blob) {
+                    log('✓ GIF finished!', { size: blob.size, type: blob.type });
+                    const url = URL.createObjectURL(blob);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.border = '2px solid green';
+                    document.getElementById('output').appendChild(img);
+                    
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.textContent = `Download ${source} GIF`;
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${source}-test.gif`;
+                        a.click();
+                    };
+                    document.getElementById('output').appendChild(downloadBtn);
+                });
+
+                gif.on('progress', function(p) {
+                    log('GIF progress', { progress: p });
+                });
+
+                gif.on('error', function(error) {
+                    log('ERROR in GIF generation', error);
+                });
+
+                log('Starting GIF render...');
+                gif.render();
+                
+            } catch (error) {
+                log('ERROR creating GIF', error);
+            }
+        }
+
+        function createAnimatedPreview(frames) {
+            log('Creating animated preview since GIF library failed...');
+            
+            // Show frame previews
+            const frameContainer = document.createElement('div');
+            frameContainer.className = 'frames';
+            frames.forEach((frame, i) => {
+                const frameDiv = document.createElement('div');
+                frameDiv.className = 'frame';
+                frameDiv.innerHTML = `
+                    <img src="${frame}" alt="Frame ${i + 1}" width="80" height="80">
+                    <div>Frame ${i + 1}</div>
+                `;
+                frameContainer.appendChild(frameDiv);
+            });
+            document.getElementById('output').appendChild(frameContainer);
+
+            // Create animated preview
+            let currentFrame = 0;
+            const animationContainer = document.createElement('div');
+            animationContainer.style.textAlign = 'center';
+            animationContainer.style.margin = '20px';
+            
+            const animatedImg = document.createElement('img');
+            animatedImg.src = frames[0];
+            animatedImg.style.border = '2px solid blue';
+            animatedImg.style.width = '200px';
+            animatedImg.style.height = '200px';
+            
+            animationContainer.appendChild(animatedImg);
+            document.getElementById('output').appendChild(animationContainer);
+
+            // Animate the frames
+            const interval = setInterval(() => {
+                currentFrame = (currentFrame + 1) % frames.length;
+                animatedImg.src = frames[currentFrame];
+            }, 500);
+
+            log('✓ Animation preview started! The image above cycles through frames every 500ms.');
+            log('This proves frames work. For actual GIF files, we need a working GIF library.');
+            
+            // Add download buttons for individual frames
+            const downloadContainer = document.createElement('div');
+            downloadContainer.style.margin = '20px';
+            downloadContainer.innerHTML = '<h3>Download Individual Frames (PNG):</h3>';
+            
+            frames.forEach((frame, i) => {
+                const btn = document.createElement('button');
+                btn.textContent = `Download Frame ${i + 1}`;
+                btn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = frame;
+                    a.download = `frame-${i + 1}.png`;
+                    a.click();
+                };
+                downloadContainer.appendChild(btn);
+            });
+            
+            document.getElementById('output').appendChild(downloadContainer);
+        }
+    </script>
+</body>
+</html>

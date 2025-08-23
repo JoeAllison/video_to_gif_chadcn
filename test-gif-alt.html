@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternative GIF Test</title>
+</head>
+<body>
+    <h1>Alternative GIF Test</h1>
+    <button onclick="testAlternativeGif()">Test Alternative Method</button>
+    <div id="output"></div>
+
+    <script>
+        function testAlternativeGif() {
+            const output = document.getElementById('output');
+            output.innerHTML = 'Testing alternative GIF method...';
+            
+            // Create a simple animated GIF using a different approach
+            // This will create a GIF-like animation using multiple images
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 200;
+            
+            // Create frames as separate images
+            const frames = [];
+            const delays = [];
+            
+            for (let i = 0; i < 10; i++) {
+                // Clear canvas
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 200, 200);
+                
+                // Draw animated content
+                ctx.fillStyle = `hsl(${i * 36}, 70%, 50%)`;
+                const x = 50 + Math.sin(i * 0.5) * 30;
+                const y = 50 + Math.cos(i * 0.5) * 30;
+                ctx.fillRect(x, y, 100, 100);
+                
+                // Convert canvas to image
+                const frameImg = new Image();
+                frameImg.src = canvas.toDataURL();
+                frames.push(frameImg);
+                delays.push(200); // 200ms delay
+            }
+            
+            output.innerHTML = 'Frames created, testing animation...';
+            
+            // Test animation by cycling through frames
+            let currentFrame = 0;
+            const animationInterval = setInterval(() => {
+                if (currentFrame < frames.length) {
+                    output.innerHTML = `
+                        <h3>Frame ${currentFrame + 1} of ${frames.length}</h3>
+                        <img src="${frames[currentFrame].src}" alt="Frame ${currentFrame + 1}" style="border: 1px solid #ccc;">
+                        <p>Delay: ${delays[currentFrame]}ms</p>
+                    `;
+                    currentFrame++;
+                } else {
+                    clearInterval(animationInterval);
+                    output.innerHTML = `
+                        <h3>Animation Test Complete</h3>
+                        <p>All ${frames.length} frames displayed successfully.</p>
+                        <p>If you can see the frames changing above, the issue is with GIF generation, not frame creation.</p>
+                    `;
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>

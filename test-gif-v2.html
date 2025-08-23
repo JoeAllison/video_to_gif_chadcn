@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Test v2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .output { margin: 20px 0; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h1>GIF Test with Different Library</h1>
+    <button onclick="testGifV2()">Test GIF v2</button>
+    <button onclick="testGifV1()">Test GIF v1</button>
+    <div id="output"></div>
+
+    <script>
+        function log(message, data = null) {
+            const output = document.getElementById('output');
+            const entry = document.createElement('div');
+            entry.className = 'output';
+            entry.innerHTML = `<strong>${message}</strong>`;
+            if (data) {
+                entry.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            output.appendChild(entry);
+            console.log(message, data);
+        }
+
+        function testGifV2() {
+            log('Testing with gif.js version 2...');
+            
+            // Try to load a different version
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/gif.js@2.0.0/dist/gif.js';
+            script.onload = function() {
+                log('GIF.js v2 loaded, testing...');
+                createTestGif();
+            };
+            script.onerror = function() {
+                log('Failed to load GIF.js v2, trying alternative...');
+                // Try another approach
+                testAlternativeMethod();
+            };
+            document.head.appendChild(script);
+        }
+
+        function testGifV1() {
+            log('Testing with gif.js version 1...');
+            
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/gif.js@1.0.0/dist/gif.js';
+            script.onload = function() {
+                log('GIF.js v1 loaded, testing...');
+                createTestGif();
+            };
+            script.onerror = function() {
+                log('Failed to load GIF.js v1');
+            };
+            document.head.appendChild(script);
+        }
+
+        function createTestGif() {
+            try {
+                if (typeof GIF === 'undefined') {
+                    log('ERROR: GIF library still not available');
+                    return;
+                }
+
+                log('Creating GIF object...');
+                const gif = new GIF({
+                    workers: 1,
+                    quality: 10,
+                    width: 100,
+                    height: 100
+                });
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 100;
+                canvas.height = 100;
+
+                // Create very distinct frames
+                for (let i = 0; i < 5; i++) {
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    // Different colors and positions
+                    ctx.fillStyle = `hsl(${i * 72}, 70%, 50%)`;
+                    ctx.fillRect(20 + i * 10, 20 + i * 5, 60 - i * 10, 60 - i * 10);
+                    
+                    gif.addFrame(canvas, { delay: 300 });
+                }
+
+                gif.on('finished', function(blob) {
+                    log('GIF finished!', { size: blob.size, type: blob.type });
+                    const url = URL.createObjectURL(blob);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.style.border = '2px solid green';
+                    document.getElementById('output').appendChild(img);
+                });
+
+                gif.render();
+                
+            } catch (error) {
+                log('ERROR creating GIF', error);
+            }
+        }
+
+        function testAlternativeMethod() {
+            log('Testing alternative method: creating animated PNG...');
+            
+            // Create a simple animation using multiple images
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+            
+            const frames = [];
+            for (let i = 0; i < 5; i++) {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = `rgb(${i * 50}, 100, 150)`;
+                ctx.fillRect(10 + i * 15, 10 + i * 10, 80 - i * 15, 80 - i * 10);
+                
+                frames.push(canvas.toDataURL());
+            }
+            
+            // Show frames in sequence
+            let currentFrame = 0;
+            const interval = setInterval(() => {
+                if (currentFrame < frames.length) {
+                    const img = document.createElement('img');
+                    img.src = frames[currentFrame];
+                    img.style.border = '1px solid #ccc';
+                    img.style.margin = '5px';
+                    document.getElementById('output').appendChild(img);
+                    currentFrame++;
+                } else {
+                    clearInterval(interval);
+                    log('Frame sequence complete - if you see different images above, frames are working');
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>
