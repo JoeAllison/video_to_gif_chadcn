@@ -3,186 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP4 to GIF Converter - Professional Video Processing</title>
-    <meta name="description" content="Convert MP4 videos to animated GIFs with professional quality and modern design">
+    <title>MP4 to GIF Converter - Powered by ADS Drone</title>
+    <meta name="description" content="Convert MP4 videos to animated GIFs using the ADS Drone design system">
     
-    <!-- Fonts -->
+    <!-- Google Fonts - Inter (Drone's preferred font) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
+    <!-- Font Awesome 6 for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Styles -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- Drone Design System Styles -->
+    <link rel="stylesheet" href="drone-styles.css">
+    
+    <!-- GIF.js Worker Configuration -->
+    <script>
+        window.GIF_WORKER_PATH = 'gif.worker.js';
+    </script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-video"></i>
+    <!-- Header with Drone branding -->
+    <header class="drone-bg--neutral drone-p-6">
+        <div class="drone-container">
+            <div class="drone-flex drone-flex--between">
+                <div class="drone-flex drone-flex--start">
+                    <div class="drone-m-4">
+                        <i class="fas fa-video drone-text--primary" style="font-size: 2rem;"></i>
                     </div>
-                    <span>MP4 to GIF</span>
+                    <div>
+                        <h1 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-0">MP4 to GIF Converter</h1>
+                        <p class="drone-text--sm drone-text--neutral drone-m-0">Powered by ADS Drone Design System</p>
+                    </div>
                 </div>
-                <div class="header-actions">
-                    <span class="version">v2.0</span>
+                <div class="drone-version drone-bg--primary drone-text--primary drone-p-2" style="border-radius: var(--drone-radius-full); font-size: var(--drone-font-size-xs); font-weight: var(--drone-font-weight-medium);">
+                    v2.0 - Drone UI
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <div class="content-grid">
-                
-                <!-- Upload Section -->
-                <div class="card fade-in">
-                    <div class="card-header">
-                        <h2><i class="fas fa-cloud-upload-alt"></i> Upload Your Video</h2>
-                        <p>Drag and drop your MP4 file or click to browse</p>
+    <main class="drone-container drone-p-8">
+        <div class="drone-grid drone-grid--cols-1" style="max-width: 800px; margin: 0 auto;">
+            
+            <!-- Upload Section -->
+            <div class="drone-card drone-card--default drone-card--md drone-m-6">
+                <div class="drone-p-6">
+                    <div class="drone-text--center drone-m-6">
+                        <i class="fas fa-cloud-upload-alt drone-text--primary" style="font-size: 3rem; margin-bottom: var(--drone-space-4);"></i>
+                        <h2 class="drone-text--2xl drone-text--bold drone-text--neutral drone-m-4">Upload Your Video</h2>
+                        <p class="drone-text--base drone-text--neutral drone-m-0">Drag and drop your MP4 file or click to browse</p>
                     </div>
-                    <div class="card-body">
-                        <div class="upload-area" id="uploadArea">
-                            <div class="upload-icon">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <div class="upload-text">
-                                <h3>Drop your MP4 file here</h3>
-                                <p>or click to browse</p>
-                            </div>
-                            <input type="file" id="fileInput" accept="video/mp4,video/*" class="file-input">
+                    
+                    <div class="upload-area drone-bg--neutral drone-p-8" id="uploadArea" style="border: 2px dashed var(--drone-neutral-300); border-radius: var(--drone-radius-xl); text-align: center; cursor: pointer; transition: all var(--drone-transition-normal);">
+                        <div class="upload-icon drone-m-4">
+                            <i class="fas fa-video drone-text--primary" style="font-size: 4rem;"></i>
                         </div>
+                        <div class="upload-text">
+                            <h3 class="drone-text--lg drone-text--semibold drone-text--neutral drone-m-4">Drop your MP4 file here</h3>
+                            <p class="drone-text--base drone-text--neutral drone-m-0">or click to browse</p>
+                        </div>
+                        <input type="file" id="fileInput" accept="video/mp4,video/*" class="file-input" style="display: none;">
                     </div>
                 </div>
-
-                <!-- Video Preview Section -->
-                <div class="card video-section hidden" id="videoSection">
-                    <div class="card-header">
-                        <h3><i class="fas fa-play-circle"></i> Video Preview</h3>
-                        <p>Review your video before conversion</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="video-container">
-                            <video id="videoPreview" controls class="video-preview"></video>
-                        </div>
-                        
-                        <!-- Conversion Controls -->
-                        <div class="controls">
-                            <div class="control-group">
-                                <label for="fpsSlider" class="control-label">
-                                    <i class="fas fa-tachometer-alt"></i>
-                                    Frames per Second
-                                </label>
-                                <div class="slider-container">
-                                    <input type="range" id="fpsSlider" min="1" max="30" value="10" class="slider">
-                                    <span class="value-display" id="fpsValue">10</span>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label for="scaleSlider" class="control-label">
-                                    <i class="fas fa-expand-arrows-alt"></i>
-                                    Width (pixels)
-                                </label>
-                                <div class="slider-container">
-                                    <input type="range" id="scaleSlider" min="100" max="800" value="400" step="50" class="slider">
-                                    <span class="value-display" id="scaleValue">400</span>
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <label for="qualitySlider" class="control-label">
-                                    <i class="fas fa-star"></i>
-                                    Quality
-                                </label>
-                                <div class="slider-container">
-                                    <input type="range" id="qualitySlider" min="1" max="10" value="7" class="slider">
-                                    <span class="value-display" id="qualityValue">7</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center mt-6">
-                            <button class="btn btn-primary btn-lg" id="convertBtn" onclick="convertToGif()">
-                                <i class="fas fa-magic btn-icon"></i>
-                                Convert to GIF
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Progress Section -->
-                <div class="card progress-section hidden" id="progressSection">
-                    <div class="card-body">
-                        <h3><i class="fas fa-cogs"></i> Processing Your Video</h3>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <p id="progressText" class="progress-text">Processing frames...</p>
-                    </div>
-                </div>
-
-                <!-- Output Section -->
-                <div class="card output-section hidden" id="outputSection">
-                    <div class="card-header">
-                        <h3><i class="fas fa-check-circle"></i> Your Animated Content is Ready!</h3>
-                        <p>Download your GIF or convert another video</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="gif-container">
-                            <img id="gifOutput" alt="Animated Content" class="gif-output">
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="output-actions">
-                            <button class="btn btn-success btn-lg" id="downloadBtn">
-                                <i class="fas fa-download btn-icon"></i>
-                                Download Animated GIF
-                            </button>
-                            <button class="btn btn-secondary btn-lg" onclick="resetConverter()">
-                                <i class="fas fa-redo btn-icon"></i>
-                                Convert Another
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Error Section -->
-                <div class="card error-section hidden" id="errorSection">
-                    <div class="card-body">
-                        <h3><i class="fas fa-exclamation-triangle"></i> Something went wrong</h3>
-                        <p id="errorMessage">An error occurred during processing</p>
-                        <div class="text-center mt-6">
-                            <button class="btn btn-secondary" onclick="resetConverter()">
-                                <i class="fas fa-redo btn-icon"></i>
-                                Try Again
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- Video Preview Section -->
+            <div class="drone-card drone-card--default drone-card--md drone-m-6 hidden" id="videoSection">
+                <div class="drone-p-6">
+                    <h3 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-4">Video Preview</h3>
+                    <div class="video-preview drone-m-4" style="text-align: center;">
+                        <video id="videoPlayer" controls style="max-width: 100%; border-radius: var(--drone-radius-lg);">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="drone-card drone-card--default drone-card--md drone-m-6 hidden" id="controlsSection">
+                <div class="drone-p-6">
+                    <h3 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-4">Conversion Settings</h3>
+                    
+                    <div class="drone-grid drone-grid--cols-2 drone-m-6" style="gap: var(--drone-space-8);">
+                        <!-- FPS Control -->
+                        <div class="control-group">
+                            <label for="fpsSlider" class="drone-text--base drone-text--medium drone-text--neutral drone-m-2">Frames per Second (FPS)</label>
+                            <div class="drone-flex drone-flex--between drone-m-2">
+                                <span class="drone-text--sm drone-text--neutral">1</span>
+                                <span class="drone-text--sm drone-text--neutral">30</span>
+                            </div>
+                            <input type="range" id="fpsSlider" min="1" max="30" value="10" class="drone-input drone-input--default drone-input--lg">
+                            <div class="value-display drone-text--center drone-m-2">
+                                <span id="fpsValue" class="drone-text--lg drone-text--bold drone-text--primary">10</span> FPS
+                            </div>
+                        </div>
+
+                        <!-- Quality Control -->
+                        <div class="control-group">
+                            <label for="qualitySlider" class="drone-text--base drone-text--medium drone-text--neutral drone-m-2">Quality</label>
+                            <div class="drone-flex drone-flex--between drone-m-2">
+                                <span class="drone-text--sm drone-text--neutral">Low</span>
+                                <span class="drone-text--sm drone-text--neutral">High</span>
+                            </div>
+                            <input type="range" id="qualitySlider" min="1" max="10" value="7" class="drone-input drone-input--default drone-input--lg">
+                            <div class="value-display drone-text--center drone-m-2">
+                                <span id="qualityValue" class="drone-text--lg drone-text--bold drone-text--primary">7</span> / 10
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="drone-text--center drone-m-6">
+                        <button id="startBtn" class="drone-btn drone-btn--primary drone-btn--lg drone-m-4">
+                            <i class="fas fa-play drone-m-2"></i>
+                            Start Conversion
+                        </button>
+                        <button id="resetBtn" class="drone-btn drone-btn--secondary drone-btn--lg drone-m-4">
+                            <i class="fas fa-redo drone-m-2"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="drone-card drone-card--default drone-card--md drone-m-6 hidden" id="progressSection">
+                <div class="drone-p-6">
+                    <h3 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-4">Converting Video...</h3>
+                    
+                    <div class="drone-progress drone-progress--linear drone-progress--primary drone-progress--lg drone-m-6">
+                        <div class="drone-progress__bar" id="progressBar" style="width: 0%;"></div>
+                    </div>
+                    
+                    <div class="drone-text--center drone-m-4">
+                        <p id="progressText" class="drone-text--base drone-text--neutral drone-m-0">Processing frames...</p>
+                        <p id="progressPercent" class="drone-text--lg drone-text--bold drone-text--primary drone-m-2">0%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Section -->
+            <div class="drone-card drone-card--default drone-card--md drone-m-6 hidden" id="outputSection">
+                <div class="drone-p-6">
+                    <h3 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-4">Your Animated GIF</h3>
+                    
+                    <div class="gif-container drone-m-6" style="text-align: center;">
+                        <div class="gif-output drone-m-4" id="gifOutput" style="border: 2px solid var(--drone-neutral-200); border-radius: var(--drone-radius-lg); padding: var(--drone-space-4); background: var(--drone-neutral-50);">
+                            <!-- GIF will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="output-actions drone-text--center drone-m-6">
+                        <button id="downloadBtn" class="drone-btn drone-btn--success drone-btn--lg drone-m-4">
+                            <i class="fas fa-download drone-m-2"></i>
+                            Download Animated GIF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Section -->
+            <div class="drone-card drone-card--error drone-card--md drone-m-6 hidden" id="errorSection">
+                <div class="drone-p-6">
+                    <div class="drone-text--center drone-m-4">
+                        <i class="fas fa-exclamation-triangle drone-text--error" style="font-size: 3rem; margin-bottom: var(--drone-space-4);"></i>
+                        <h3 class="drone-text--xl drone-text--bold drone-text--error drone-m-4">Oops! Something went wrong</h3>
+                        <p id="errorMessage" class="drone-text--base drone-text--neutral drone-m-4">An error occurred during conversion.</p>
+                        <button id="errorCloseBtn" class="drone-btn drone-btn--secondary drone-btn--md drone-m-4">
+                            <i class="fas fa-times drone-m-2"></i>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>Made with <i class="fas fa-heart"></i> - No files are uploaded to any server</p>
+    <footer class="drone-bg--neutral drone-p-6 drone-m-8">
+        <div class="drone-container">
+            <div class="drone-text--center">
+                <p class="drone-text--sm drone-text--neutral drone-m-0">
+                    Built with <i class="fas fa-heart drone-text--error"></i> using the 
+                    <span class="drone-text--primary drone-text--medium">ADS Drone Design System</span>
+                </p>
+                <p class="drone-text--xs drone-text--neutral drone-m-2">
+                    Convert your MP4 videos to animated GIFs with professional quality
+                </p>
+            </div>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
-    <script>
-        // Configure GIF.js to use the local worker file
-        window.GIF_WORKER_PATH = 'gif.worker.js';
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+    <script src="drone-ui-integration.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
