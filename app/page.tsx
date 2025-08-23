@@ -66,6 +66,17 @@ export default function VideoToGifConverter() {
     setVideoFrames([])
     setProgress(0)
     setShowPreview(false)
+
+    // Scroll to the conversion settings section after a short delay
+    setTimeout(() => {
+      const settingsSection = document.querySelector('[data-section="conversion-settings"]')
+      if (settingsSection) {
+        settingsSection.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        })
+      }
+    }, 300)
   }, [])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
@@ -286,7 +297,7 @@ export default function VideoToGifConverter() {
           </section>
           
           {/* Main Converter Section - Single Column Layout */}
-          <div className="space-y-8">
+          <div className="space-y-16">
             
             {/* Upload Section */}
             <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
@@ -469,125 +480,126 @@ export default function VideoToGifConverter() {
               )}
             </div>
 
-            {/* Conversion Settings - Only show after file upload */}
+            {/* Conversion Settings and Actions - Side by Side */}
             {videoFile && (
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                <CardHeader className="text-center">
-                  <CardTitle className="flex items-center justify-center space-x-2 text-foreground">
-                    <Settings className="h-5 w-5" />
-                    <span>Conversion Settings</span>
-                  </CardTitle>
-                  <CardDescription>
-                    Customize your GIF output with these advanced settings
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-8">
-                  
-                  {/* FPS Control */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
-                        Frames per Second (FPS)
-                      </label>
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
-                        {fps} FPS
-                      </Badge>
-                    </div>
-                    <div className="space-y-3">
-                      <Slider
-                        value={[fps]}
-                        onValueChange={(value) => setFps(value[0])}
-                        max={30}
-                        min={1}
-                        step={1}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>1 FPS</span>
-                        <span>30 FPS</span>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                {/* Conversion Settings */}
+                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-section="conversion-settings">
+                  <CardHeader className="text-center">
+                    <CardTitle className="flex items-center justify-center space-x-2 text-foreground">
+                      <Settings className="h-5 w-5" />
+                      <span>Conversion Settings</span>
+                    </CardTitle>
+                    <CardDescription>
+                      Customize your GIF output with these advanced settings
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8">
+                    
+                    {/* FPS Control */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">
+                          Frames per Second (FPS)
+                        </label>
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-300">
+                          {fps} FPS
+                        </Badge>
                       </div>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Higher FPS creates smoother animations but larger file sizes
-                    </p>
-                  </div>
-
-                  <Separator />
-
-                  {/* Quality Control */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-foreground">
-                        Image Quality
-                      </label>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300">
-                        {quality}/10
-                      </Badge>
-                    </div>
-                    <div className="space-y-3">
-                      <Slider
-                        value={[quality]}
-                        onValueChange={(value) => setQuality(value[0])}
-                        max={10}
-                        min={1}
-                        step={1}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Low</span>
-                        <span>High</span>
+                      <div className="space-y-3">
+                        <Slider
+                          value={[fps]}
+                          onValueChange={(value) => setFps(value[0])}
+                          max={30}
+                          min={1}
+                          step={1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>1 FPS</span>
+                          <span>30 FPS</span>
+                        </div>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        Higher FPS creates smoother animations but larger file sizes
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Higher quality means better image clarity but larger files
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
 
-            {/* Quick Actions - Only show after file upload */}
-            {videoFile && (
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-foreground">
-                    Ready to Convert?
-                  </CardTitle>
-                  <CardDescription>
-                    Configure your settings above, then start the conversion process
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Button 
-                    onClick={startConversion} 
-                    disabled={isConverting}
-                    size="lg"
-                    className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary hover:to-blue-700 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    {isConverting ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-3" />
-                        Converting...
+                    <Separator />
+
+                    {/* Quality Control */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium text-foreground">
+                          Image Quality
+                        </label>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950/30 dark:text-green-300">
+                          {quality}/10
+                        </Badge>
+                      </div>
+                      <div className="space-y-3">
+                        <Slider
+                          value={[quality]}
+                          onValueChange={(value) => setQuality(value[0])}
+                          max={10}
+                          min={1}
+                          step={1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Low</span>
+                          <span>High</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Higher quality means better image clarity but larger files
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Quick Actions */}
+                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+                  <CardHeader className="text-center pb-6">
+                    <CardTitle className="text-foreground text-xl">
+                      Ready to Convert?
+                    </CardTitle>
+                    <CardDescription className="text-base">
+                      Configure your settings on the left, then start the conversion process
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-center space-y-6 px-8 pb-8">
+                    <Button 
+                      onClick={startConversion} 
+                      disabled={isConverting}
+                      size="lg"
+                      className="w-full max-w-xs bg-gradient-to-r from-primary to-blue-600 hover:from-primary hover:to-blue-700 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                    >
+                      {isConverting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground mr-3" />
+                          Converting...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="h-5 w-5 mr-3" />
+                          Start Conversion
                       </>
-                    ) : (
-                      <>
-                        <Play className="h-5 w-5 mr-3" />
-                        Start Conversion
-                      </>
-                    )}
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={resetConverter}
-                    disabled={isConverting}
-                    size="lg"
-                    className="w-full border-border hover:bg-accent"
-                  >
-                    <RotateCcw className="h-5 w-5 mr-3" />
-                    Choose Different Video
-                  </Button>
-                </CardContent>
-              </Card>
+                      )}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={resetConverter}
+                      disabled={isConverting}
+                      size="lg"
+                      className="w-full max-w-xs border-border hover:bg-accent"
+                    >
+                      <RotateCcw className="h-5 w-5 mr-3" />
+                      Choose Different Video
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
             )}
 
             {/* Progress Section */}
@@ -633,7 +645,19 @@ export default function VideoToGifConverter() {
                         src={videoFrames[currentFrame]?.dataUrl}
                         alt="Animated GIF Preview"
                         className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
+                        style={{
+                          animation: `frameAnimation ${videoFrames.length * (1000 / fps)}ms steps(${videoFrames.length}) infinite`
+                        }}
                       />
+                      <style dangerouslySetInnerHTML={{
+                        __html: `
+                          @keyframes frameAnimation {
+                            ${videoFrames.map((_, index) => 
+                              `${(index / videoFrames.length) * 100}% { content: url("${videoFrames[index]?.dataUrl}"); }`
+                            ).join('\n')}
+                          }
+                        `
+                      }} />
                     </div>
                   </div>
                   
