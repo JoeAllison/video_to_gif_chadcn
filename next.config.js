@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove static export config - using GitHub Actions instead
+  // Static export for GitHub Pages
+  output: 'export',
+  trailingSlash: true,
   images: {
     unoptimized: true
   }
