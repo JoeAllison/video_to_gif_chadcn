@@ -140,13 +140,66 @@ export default function VideoToGifConverter() {
   const downloadGif = useCallback(async () => {
     if (videoFrames.length === 0) return
 
-    // For now, we'll download the first frame as a PNG
-    // In a full implementation, you'd use a GIF library like gif.js
-    const link = document.createElement('a')
-    link.download = 'converted-frame.png'
-    link.href = videoFrames[0].dataUrl
-    link.click()
-  }, [videoFrames])
+    try {
+      // Show generating message
+      const originalText = document.querySelector('[data-download-text]')?.textContent
+      const downloadButton = document.querySelector('[data-download-button]') as HTMLButtonElement
+      if (downloadButton) {
+        downloadButton.disabled = true
+        downloadButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>Generating GIF...'
+      }
+
+      // Create a new GIF instance
+      const gif = new (window as any).GIF({
+        workers: 2,
+        quality: quality,
+        width: canvasRef.current?.width || 640,
+        height: canvasRef.current?.height || 480,
+        workerScript: '/gif.worker.js'
+      })
+
+      // Add each frame to the GIF
+      for (let i = 0; i < videoFrames.length; i++) {
+        const img = new Image()
+        img.src = videoFrames[i].dataUrl
+        
+        await new Promise((resolve) => {
+          img.onload = () => {
+            gif.addFrame(img, { delay: 1000 / fps })
+            resolve(null)
+          }
+        })
+      }
+
+      // Generate the GIF
+      gif.on('finished', (blob: Blob) => {
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.download = `converted-video-${fps}fps.gif`
+        link.href = url
+        link.click()
+        URL.revokeObjectURL(url)
+        
+        // Reset button
+        if (downloadButton) {
+          downloadButton.disabled = false
+          downloadButton.innerHTML = '<Download className="h-5 w-5 mr-3" />Download GIF'
+        }
+      })
+
+      gif.render()
+    } catch (error) {
+      console.error('Error generating GIF:', error)
+      alert('Error generating GIF. Please try again.')
+      
+      // Reset button on error
+      const downloadButton = document.querySelector('[data-download-button]') as HTMLButtonElement
+      if (downloadButton) {
+        downloadButton.disabled = false
+        downloadButton.innerHTML = '<Download className="h-5 w-5 mr-3" />Download GIF'
+      }
+    }
+  }, [videoFrames, fps, quality])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-blue-50 to-indigo-100 dark:from-background dark:via-slate-900 dark:to-slate-800">
@@ -354,30 +407,72 @@ export default function VideoToGifConverter() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-8">
-                    <div className="text-center">
-                      <div className="relative inline-block">
-                        <img
-                          src={videoFrames[currentFrame]?.dataUrl}
-                          alt={`Frame ${currentFrame + 1}`}
-                          className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
-                        />
-                        <div className="absolute top-4 right-4">
-                          <Badge className="bg-black/20 text-white backdrop-blur-sm text-lg px-4 py-2">
-                            Frame {currentFrame + 1} of {videoFrames.length}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
+                                     <div className="text-center">
+                   <div className="relative inline-block">
+                     <img
+                       src={videoFrames[currentFrame]?.dataUrl}
+                       alt={`Frame ${currentFrame + 1}`}
+                       className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
+                     />
+                     <div className="absolute top-4 right-4">
+                       <Badge className="bg-black/20 text-white backdrop-blur-sm text-lg px-4 py-2">
+                         Frame {currentFrame + 1} of {videoFrames.length}
+                       </Badge>
+                     </div>
+                   </div>
+                   
+                   {/* Frame Navigation */}
+                   <div className="mt-6 flex items-center justify-center space-x-4">
+                     <Button
+                       variant="outline"
+                       size="sm"
+                       onClick={() => setCurrentFrame(Math.max(0, currentFrame - 1))}
+                       disabled={currentFrame === 0}
+                       className="px-4"
+                     >
+                       Previous Frame
+                     </Button>
+                     
+                     <div className="flex items-center space-x-2">
+                       <span className="text-sm text-muted-foreground">Frame</span>
+                       <input
+                         type="number"
+                         min="1"
+                         max={videoFrames.length}
+                         value={currentFrame + 1}
+                         onChange={(e) => {
+                           const frameIndex = parseInt(e.target.value) - 1
+                           if (frameIndex >= 0 && frameIndex < videoFrames.length) {
+                             setCurrentFrame(frameIndex)
+                           }
+                         }}
+                         className="w-16 text-center border rounded px-2 py-1 text-sm"
+                       />
+                       <span className="text-sm text-muted-foreground">of {videoFrames.length}</span>
+                     </div>
+                     
+                     <Button
+                       variant="outline"
+                       size="sm"
+                       onClick={() => setCurrentFrame(Math.min(videoFrames.length - 1, currentFrame + 1))}
+                       disabled={currentFrame === videoFrames.length - 1}
+                       className="px-4"
+                     >
+                       Next Frame
+                     </Button>
+                   </div>
+                 </div>
                     
                     <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                      <Button 
-                        onClick={downloadGif} 
-                        size="lg"
-                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                      >
-                        <Download className="h-5 w-5 mr-3" />
-                        Download Frame
-                      </Button>
+                                           <Button 
+                       onClick={downloadGif} 
+                       size="lg"
+                       data-download-button
+                       className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                     >
+                       <Download className="h-5 w-5 mr-3" />
+                       <span data-download-text>Download GIF</span>
+                     </Button>
                       <Button 
                         variant="outline" 
                         onClick={resetConverter}
