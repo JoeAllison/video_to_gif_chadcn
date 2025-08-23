@@ -1,0 +1,46 @@
+{
+  "name": "mp4-to-gif-converter",
+  "version": "1.0.0",
+  "description": "A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.",
+
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoeAllison/video_to_gif_chadcn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoeAllison/video_to_gif_chadcn/issues"
+  },
+  "homepage": "https://github.com/JoeAllison/video_to_gif_chadcn#readme",
+  "dependencies": {
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.541.0",
+    "next": "^15.5.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.7",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12",
+    "tw-animate-css": "^1.3.7",
+    "typescript": "^5.9.2"
+  }
+}

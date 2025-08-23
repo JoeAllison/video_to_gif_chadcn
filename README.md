@@ -1,104 +1,138 @@
-# MP4 to GIF Converter
+# Video to GIF Converter - ShadCN Version
 
-A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.
+A modern, browser-based video to GIF converter built with **Next.js 14** and **ShadCN UI**. Convert your videos to animated GIFs with a beautiful, responsive interface.
 
-## Features
+## ✨ Features
 
-- 🎥 **Video Support**: Upload MP4 and other video formats
-- 🖼️ **GIF Conversion**: Convert videos to animated GIFs
-- ⚙️ **Customizable Settings**: Adjust FPS, size, and quality
-- 📱 **Responsive Design**: Works on desktop and mobile devices
-- 🔒 **Privacy First**: No server uploads, all processing is local
-- 🎨 **Modern UI**: Beautiful, intuitive interface with smooth animations
+- **Modern UI**: Built with ShadCN design system components
+- **Multiple Formats**: Supports MP4, MOV, AVI, WebM, and other video formats
+- **Browser-Based**: All processing happens locally - no files uploaded to servers
+- **Customizable**: Adjust FPS and quality settings
+- **Responsive**: Works perfectly on desktop, tablet, and mobile
+- **Dark Mode Ready**: Built-in support for light/dark themes
 
-## How to Use
+## 🚀 Tech Stack
 
-1. **Upload Video**: Drag and drop an MP4 file or click to browse
-2. **Preview**: Watch your video to ensure it's the right one
-3. **Adjust Settings**: 
-   - **FPS**: Control how smooth the animation is (1-30 fps)
-   - **Width**: Set the GIF size (100-800 pixels)
-   - **Quality**: Balance between file size and image quality (1-10)
-4. **Convert**: Click "Convert to GIF" and wait for processing
-5. **Download**: Save your new GIF file
+- **Framework**: Next.js 14 (App Router)
+- **UI Components**: ShadCN UI
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Language**: TypeScript
+- **Build Tool**: Turbopack
 
-## Technical Details
+## 🛠️ Development
 
-- **Frontend**: Pure HTML5, CSS3, and JavaScript
-- **Video Processing**: Uses HTML5 Canvas API for frame extraction
-- **GIF Generation**: Powered by [gif.js](https://github.com/buzzfeed/libgif-js) library
-- **Browser Support**: Modern browsers with HTML5 video support
+### Prerequisites
 
-## File Size Limits
+- Node.js 18+ 
+- npm or yarn
 
-- **Recommended**: Keep videos under 50MB for optimal performance
-- **Maximum**: 100MB (may cause performance issues on slower devices)
-- **Duration**: Shorter videos (under 30 seconds) work best
+### Installation
 
-## Browser Compatibility
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:JoeAllison/video_to_gif_chadcn.git
+   cd video_to_gif_chadcn
+   ```
 
-- ✅ Chrome 60+
-- ✅ Firefox 55+
-- ✅ Safari 11+
-- ✅ Edge 79+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Performance Tips
+3. **Run development server**
+   ```bash
+   npm run dev
+   ```
 
-1. **Lower FPS**: Use 5-15 fps for better performance
-2. **Smaller Size**: 300-500 pixel width is usually sufficient
-3. **Shorter Videos**: Convert clips rather than full videos
-4. **Close Tabs**: Free up memory by closing other browser tabs
+4. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-## Local Development
+### Available Scripts
 
-To run this project locally:
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-1. Clone or download the files
-2. Open `index.html` in a modern web browser
-3. No build process or dependencies required!
+## 🎨 Design System
 
-## File Structure
+This project uses **ShadCN UI**, a collection of beautifully designed, accessible components built on top of Tailwind CSS and Radix UI.
 
+### Key Components Used
+
+- **Button** - Primary actions and secondary buttons
+- **Card** - Content containers with headers and descriptions
+- **Input** - File input handling
+- **Progress** - Conversion progress indicator
+- **Slider** - FPS and quality controls
+
+### Color Scheme
+
+- **Primary**: Blue (#3b82f6)
+- **Secondary**: Gray (#f3f4f6)
+- **Accent**: Light blue (#eff6ff)
+- **Destructive**: Red (#ef4444)
+- **Muted**: Subtle grays for secondary text
+
+## 📱 Responsive Design
+
+The interface is fully responsive and works across all device sizes:
+
+- **Desktop**: Full-width layout with side-by-side controls
+- **Tablet**: Optimized spacing and touch-friendly controls
+- **Mobile**: Stacked layout with mobile-optimized interactions
+
+## 🔧 Customization
+
+### Adding New Components
+
+```bash
+npx shadcn@latest add [component-name]
 ```
-mp4-to-gif-converter/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styles and responsive design
-├── script.js           # JavaScript functionality
-└── README.md           # This file
-```
 
-## Limitations
+### Modifying Themes
 
-- **Color Depth**: GIFs are limited to 256 colors
-- **File Size**: Large videos may create very large GIF files
-- **Processing Time**: Depends on video length and settings
-- **Browser Memory**: Very long videos may cause memory issues
+Edit `app/globals.css` to customize:
+- Color schemes
+- Border radius
+- Spacing
+- Typography
 
-## Troubleshooting
+### Adding New Features
 
-### Video Won't Load
-- Ensure the file is a valid video format
-- Check that the file isn't corrupted
-- Try a different video file
+The modular component structure makes it easy to add new features:
+- New conversion options
+- Additional output formats
+- Enhanced preview capabilities
+- Batch processing
 
-### Conversion Fails
-- Reduce video length or quality settings
-- Close other browser tabs to free memory
-- Try a different browser
+## 🚀 Deployment
 
-### Slow Performance
-- Lower the FPS setting
-- Reduce the width/height
-- Use shorter video clips
+### Vercel (Recommended)
 
-## Contributing
+1. Push to GitHub
+2. Connect repository to Vercel
+3. Deploy automatically
 
-Feel free to submit issues, feature requests, or pull requests to improve this converter!
+### Other Platforms
 
-## License
+- **Netlify**: Works with `npm run build`
+- **GitHub Pages**: Requires static export
+- **Traditional hosting**: Upload `out` folder after build
 
-This project is open source and available under the MIT License.
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+
+If you encounter any issues or have questions, please open an issue on GitHub.
 
 ---
 
-**Note**: This converter works entirely in your browser. No video files are uploaded to any server, ensuring your privacy and security.
+Built with ❤️ using Next.js and ShadCN UI
