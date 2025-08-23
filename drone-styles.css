@@ -761,13 +761,11 @@ body {
 .agoda-logo-img {
     height: 32px;
     width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all var(--drone-transition-normal);
     object-fit: contain;
 }
 
 .agoda-logo:hover .agoda-logo-img {
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     transform: scale(1.05);
 }
 
