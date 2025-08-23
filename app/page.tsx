@@ -267,12 +267,23 @@ export default function VideoToGifConverter() {
                 </p>
               </div>
             </div>
+
+            {/* Buy Me a Coffee Donation Button */}
             <div className="flex items-center space-x-3">
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-                <Zap className="h-3 w-3 mr-1" />
-                v2.0 - Professional
-              </Badge>
+                              <a
+                  href="https://www.buymeacoffee.com/joeallison"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
+                  title="Support this tool with a coffee"
+                >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>Buy me a coffee</span>
+              </a>
             </div>
+
           </div>
         </div>
       </header>
@@ -282,42 +293,29 @@ export default function VideoToGifConverter() {
         <div className="max-w-6xl mx-auto">
           
           {/* Hero Section */}
-          <section className="text-center mb-12">
-            <div className="max-w-3xl mx-auto space-y-6">
-              <h2 className="text-4xl font-bold text-foreground leading-tight text-center">
+          <section className="text-center mb-8">
+            <div className="max-w-2xl mx-auto space-y-3">
+              <h2 className="text-3xl font-bold text-foreground leading-tight">
                 Transform Your Videos into Beautiful Animated GIFs
               </h2>
-              <p className="text-xl text-muted-foreground leading-relaxed text-center">
-                Upload any video format and convert it to high-quality animated GIFs with our advanced browser-based converter. 
-                No server uploads, complete privacy, and professional results.
+              <p className="text-muted-foreground">
+                Convert videos in your browser. Nothing is uploaded or stored on servers.
               </p>
-              <div className="flex items-center justify-center space-x-6 text-sm text-muted-foreground">
-                <div className="flex items-center space-x-2">
-                  <Clock className="h-4 w-4" />
-                  <span>Fast Processing</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <ImageIcon className="h-4 w-4" />
-                  <span>High Quality</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Video className="h-4 w-4" />
-                  <span>Multiple Formats</span>
-                </div>
-              </div>
             </div>
           </section>
           
           {/* Main Converter Section - Single Column Layout */}
-          <div className="space-y-16">
+          <div className="space-y-8">
             
+
+
             {/* Upload Section - Only show before conversion starts */}
             {!isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
-                <CardContent className="px-12 py-12">
+                <CardContent className="px-8 py-8">
                   <div
                     className={cn(
-                      "border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer group",
+                      "border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group",
                       videoFile 
                         ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
                         : 'border-border hover:border-primary/50 hover:bg-accent/50'
@@ -326,7 +324,7 @@ export default function VideoToGifConverter() {
                     onDragOver={handleDragOver}
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    {videoFile ? (
+                                        {videoFile ? (
                       <div className="space-y-4">
                         <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
                           <CheckCircle className="h-12 w-12 text-white" />
@@ -350,11 +348,30 @@ export default function VideoToGifConverter() {
                         <p className="text-muted-foreground text-lg">
                           Drag and drop your video file or click to browse
                         </p>
-                        <div className="inline-flex items-center space-x-3 bg-muted px-4 py-2 rounded-full">
-                          <Info className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm text-muted-foreground">
-                            Supports MP4, MOV, AVI, WebM, and other video formats
-                          </span>
+                        
+                        {/* Trust Indicators */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-center space-x-3">
+                            <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-950/30 px-3 py-1.5 rounded-full">
+                              <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-sm font-medium text-green-700 dark:text-green-300">100% Private</span>
+                            </div>
+                            <div className="flex items-center space-x-2 bg-blue-50 dark:bg-blue-950/30 px-3 py-1.5 rounded-full">
+                              <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">Secure</span>
+                            </div>
+                          </div>
+                          <div className="text-xs text-muted-foreground text-center">
+                            Your video never leaves your device • All processing happens locally
+                          </div>
+                        </div>
+                        
+                        <div className="text-sm text-muted-foreground">
+                          Supports MP4, MOV, AVI, WebM and other formats
                         </div>
                       </div>
                     )}
