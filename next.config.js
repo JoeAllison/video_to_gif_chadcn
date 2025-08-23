@@ -5,11 +5,17 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
     };
+    
+    // Make asset paths relative for static export
+    if (!isServer) {
+      config.output.publicPath = './';
+    }
+    
     return config;
   },
 }
