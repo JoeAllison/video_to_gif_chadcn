@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP4 to GIF Converter - Powered by ADS Drone</title>
-    <meta name="description" content="Convert MP4 videos to animated GIFs using the ADS Drone design system">
+    <title>Video to GIF Converter - Powered by ADS Drone</title>
+    <meta name="description" content="Convert videos to animated GIFs using the ADS Drone design system">
     
     <!-- Google Fonts - Inter (Drone's preferred font) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
                         <i class="fas fa-video drone-text--primary" style="font-size: 2rem;"></i>
                     </div>
                     <div>
-                        <h1 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-0">MP4 to GIF Converter</h1>
+                        <h1 class="drone-text--xl drone-text--bold drone-text--neutral drone-m-0">Video to GIF Converter</h1>
                         <p class="drone-text--sm drone-text--neutral drone-m-0">Powered by ADS Drone Design System</p>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="drone-text--center drone-m-6">
                         <i class="fas fa-cloud-upload-alt drone-text--primary" style="font-size: 3rem; margin-bottom: var(--drone-space-4);"></i>
                         <h2 class="drone-text--2xl drone-text--bold drone-text--neutral drone-m-4">Upload Your Video</h2>
-                        <p class="drone-text--base drone-text--neutral drone-m-0">Drag and drop your MP4 file or click to browse</p>
+                        <p class="drone-text--base drone-text--neutral drone-m-0">Drag and drop your video file or click to browse</p>
                     </div>
                     
                     <div class="upload-area drone-bg--neutral drone-p-8" id="uploadArea" style="border: 2px dashed var(--drone-neutral-300); border-radius: var(--drone-radius-xl); text-align: center; cursor: pointer; transition: all var(--drone-transition-normal);">
@@ -61,10 +61,16 @@
                             <i class="fas fa-video drone-text--primary" style="font-size: 4rem;"></i>
                         </div>
                         <div class="upload-text">
-                            <h3 class="drone-text--lg drone-text--semibold drone-text--neutral drone-m-4">Drop your MP4 file here</h3>
+                            <h3 class="drone-text--lg drone-text--semibold drone-text--neutral drone-m-4">Drop your video file here</h3>
                             <p class="drone-text--base drone-text--neutral drone-m-0">or click to browse</p>
                         </div>
                         <input type="file" id="fileInput" accept="video/mp4,video/*" class="file-input" style="display: none;">
+                    </div>
+                    <div class="drone-text--center drone-m-4">
+                        <p class="drone-text--sm drone-text--neutral drone-m-0">
+                            <i class="fas fa-info-circle drone-text--primary drone-m-1"></i>
+                            Supports MP4, MOV, AVI, WebM, and other video formats
+                        </p>
                     </div>
                 </div>
             </div>
@@ -194,7 +200,7 @@
                     <span class="drone-text--primary drone-text--medium">ADS Drone Design System</span>
                 </p>
                 <p class="drone-text--xs drone-text--neutral drone-m-2">
-                    Convert your MP4 videos to animated GIFs with professional quality
+                    Convert your videos to animated GIFs with professional quality
                 </p>
             </div>
         </div>

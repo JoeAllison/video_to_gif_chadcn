@@ -1,4 +1,4 @@
-// MP4 to GIF Converter with ADS Drone Design System
+// Video to GIF Converter with ADS Drone Design System
 // Enhanced with modern UI components and improved user experience
 
 // Global variables
@@ -31,7 +31,7 @@ const errorCloseBtn = document.getElementById('errorCloseBtn');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚁 MP4 to GIF Converter initialized with ADS Drone Design System');
+    console.log('🚁 Video to GIF Converter initialized with ADS Drone Design System');
     
     setupEventListeners();
     setupSliderControls();
