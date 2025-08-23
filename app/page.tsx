@@ -133,6 +133,18 @@ export default function VideoToGifConverter() {
         setIsConverting(false)
         setProgress(100)
         setShowPreview(true)
+        
+        // Scroll to the output section after conversion completes
+        setTimeout(() => {
+          const outputSection = document.querySelector('[data-output-section]')
+          if (outputSection) {
+            outputSection.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            })
+          }
+        }, 100)
+        
         return
       }
 
@@ -251,14 +263,14 @@ export default function VideoToGifConverter() {
                 </h1>
                 <p className="text-sm text-muted-foreground flex items-center space-x-2">
                   <Sparkles className="h-3 w-3" />
-                  <span>Powered by ShadCN Design System</span>
+                  <span>Professional Video to GIF Converter</span>
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
                 <Zap className="h-3 w-3 mr-1" />
-                v2.0 - ShadCN UI
+                v2.0 - Professional
               </Badge>
             </div>
           </div>
@@ -299,189 +311,71 @@ export default function VideoToGifConverter() {
           {/* Main Converter Section - Single Column Layout */}
           <div className="space-y-16">
             
-            {/* Upload Section */}
-            <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
-              <CardContent className="px-12 py-12">
-                <div
-                  className={cn(
-                    "border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer group",
-                    videoFile 
-                      ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
-                      : 'border-border hover:border-primary/50 hover:bg-accent/50'
-                  )}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  {videoFile ? (
-                    <div className="space-y-4">
-                      <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                        <CheckCircle className="h-12 w-12 text-white" />
+            {/* Upload Section - Only show before conversion starts */}
+            {!isConverting && !showPreview && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
+                <CardContent className="px-12 py-12">
+                  <div
+                    className={cn(
+                      "border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer group",
+                      videoFile 
+                        ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
+                        : 'border-border hover:border-primary/50 hover:bg-accent/50'
+                    )}
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {videoFile ? (
+                      <div className="space-y-4">
+                        <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle className="h-12 w-12 text-white" />
+                        </div>
+                        <h3 className="text-2xl font-semibold text-green-700 dark:text-green-300">
+                          File Selected!
+                        </h3>
+                        <p className="text-foreground font-medium text-lg">{videoFile.name}</p>
+                        <p className="text-muted-foreground">
+                          Scroll down to configure settings and start conversion
+                        </p>
                       </div>
-                      <h3 className="text-2xl font-semibold text-green-700 dark:text-green-300">
-                        File Selected!
-                      </h3>
-                      <p className="text-foreground font-medium text-lg">{videoFile.name}</p>
-                      <p className="text-muted-foreground">
-                        Scroll down to configure settings and start conversion
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-6">
-                      <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
-                        <FileVideo className="h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
+                    ) : (
+                      <div className="space-y-6">
+                        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
+                          <FileVideo className="h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </div>
+                        <h3 className="text-2xl font-semibold text-foreground">
+                          Upload Your Video
+                        </h3>
+                        <p className="text-muted-foreground text-lg">
+                          Drag and drop your video file or click to browse
+                        </p>
+                        <div className="inline-flex items-center space-x-3 bg-muted px-4 py-2 rounded-full">
+                          <Info className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">
+                            Supports MP4, MOV, AVI, WebM, and other video formats
+                          </span>
+                        </div>
                       </div>
-                      <h3 className="text-2xl font-semibold text-foreground">
-                        Upload Your Video
-                      </h3>
-                      <p className="text-muted-foreground text-lg">
-                        Drag and drop your video file or click to browse
-                      </p>
-                      <div className="inline-flex items-center space-x-3 bg-muted px-4 py-2 rounded-full">
-                        <Info className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">
-                          Supports MP4, MOV, AVI, WebM, and other video formats
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <Input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (file) handleFileSelect(file)
-                  }}
-                  className="hidden"
-                />
-              </CardContent>
-            </Card>
+                    )}
+                  </div>
+                  
+                  <Input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) handleFileSelect(file)
+                    }}
+                    className="hidden"
+                  />
+                </CardContent>
+              </Card>
+            )}
 
-
-
-              {/* Progress Section */}
-              {isConverting && (
-                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader>
-                    <CardTitle className="text-foreground">
-                      Converting Video
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <Progress value={progress} className="w-full h-4" />
-                    <div className="flex items-center justify-between">
-                      <p className="text-muted-foreground">
-                        Processing frames... {Math.round(progress)}%
-                      </p>
-                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-lg px-4 py-2">
-                        {Math.round(progress)}%
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Output Section */}
-              {showPreview && videoFrames.length > 0 && (
-                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                      <CheckCircle className="h-10 w-10 text-white" />
-                    </div>
-                    <CardTitle className="text-2xl text-foreground">
-                      Conversion Complete!
-                    </CardTitle>
-                    <CardDescription className="text-lg text-muted-foreground">
-                      Your video has been converted to {videoFrames.length} frames
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-8">
-                                     <div className="text-center">
-                   <div className="relative inline-block">
-                     <img
-                       src={videoFrames[currentFrame]?.dataUrl}
-                       alt={`Frame ${currentFrame + 1}`}
-                       className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
-                     />
-                     <div className="absolute top-4 right-4">
-                       <Badge className="bg-black/20 text-white backdrop-blur-sm text-lg px-4 py-2">
-                         Frame {currentFrame + 1} of {videoFrames.length}
-                       </Badge>
-                     </div>
-                   </div>
-                   
-                   {/* Frame Navigation */}
-                   <div className="mt-6 flex items-center justify-center space-x-4">
-                     <Button
-                       variant="outline"
-                       size="sm"
-                       onClick={() => setCurrentFrame(Math.max(0, currentFrame - 1))}
-                       disabled={currentFrame === 0}
-                       className="px-4"
-                     >
-                       Previous Frame
-                     </Button>
-                     
-                     <div className="flex items-center space-x-2">
-                       <span className="text-sm text-muted-foreground">Frame</span>
-                       <input
-                         type="number"
-                         min="1"
-                         max={videoFrames.length}
-                         value={currentFrame + 1}
-                         onChange={(e) => {
-                           const frameIndex = parseInt(e.target.value) - 1
-                           if (frameIndex >= 0 && frameIndex < videoFrames.length) {
-                             setCurrentFrame(frameIndex)
-                           }
-                         }}
-                         className="w-16 text-center border rounded px-2 py-1 text-sm"
-                       />
-                       <span className="text-sm text-muted-foreground">of {videoFrames.length}</span>
-                     </div>
-                     
-                     <Button
-                       variant="outline"
-                       size="sm"
-                       onClick={() => setCurrentFrame(Math.min(videoFrames.length - 1, currentFrame + 1))}
-                       disabled={currentFrame === videoFrames.length - 1}
-                       className="px-4"
-                     >
-                       Next Frame
-                     </Button>
-                   </div>
-                 </div>
-                    
-                    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                                           <Button 
-                       onClick={downloadGif} 
-                       size="lg"
-                       data-download-button
-                       className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                     >
-                       <Download className="h-5 w-5 mr-3" />
-                       <span data-download-text>Download GIF</span>
-                     </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={resetConverter}
-                        size="lg"
-                        className="border-border hover:bg-accent"
-                      >
-                        <RotateCcw className="h-5 w-5 mr-3" />
-                        Convert Another Video
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Conversion Settings and Actions - Side by Side */}
-            {videoFile && (
+            {/* Conversion Settings and Actions - Side by Side - Only show before conversion */}
+            {videoFile && !isConverting && !showPreview && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
                 {/* Conversion Settings */}
                 <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-section="conversion-settings">
@@ -602,8 +496,8 @@ export default function VideoToGifConverter() {
               </div>
             )}
 
-            {/* Progress Section */}
-            {isConverting && (
+            {/* Progress Section - Only show when converting and not showing preview */}
+            {isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
                 <CardHeader className="text-center">
                   <CardTitle className="text-foreground">
@@ -624,9 +518,9 @@ export default function VideoToGifConverter() {
               </Card>
             )}
 
-            {/* Output Section */}
-            {showPreview && videoFrames.length > 0 && (
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
+            {/* Output Section - Only show when conversion is complete */}
+            {showPreview && videoFrames.length > 0 && !isConverting && (
+              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-output-section>
                 <CardHeader className="text-center">
                   <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
                     <CheckCircle className="h-10 w-10 text-white" />
@@ -684,6 +578,7 @@ export default function VideoToGifConverter() {
                 </CardContent>
               </Card>
             )}
+          </div>
         </div>
       </main>
 
