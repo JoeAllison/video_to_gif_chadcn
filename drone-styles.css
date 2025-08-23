@@ -759,7 +759,7 @@ body {
 }
 
 .agoda-logo-img {
-    height: 32px;
+    height: 36px;
     width: auto;
     transition: all var(--drone-transition-normal);
     object-fit: contain;
