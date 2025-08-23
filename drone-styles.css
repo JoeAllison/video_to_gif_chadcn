@@ -758,27 +758,28 @@ body {
     transition: all var(--drone-transition-normal);
 }
 
-.agoda-logo svg {
+.agoda-logo-img {
+    height: 32px;
+    width: auto;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all var(--drone-transition-normal);
+    object-fit: contain;
 }
 
-.agoda-logo:hover svg {
+.agoda-logo:hover .agoda-logo-img {
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
     transform: scale(1.05);
 }
 
 /* Responsive logo sizing */
 @media (max-width: 768px) {
-    .agoda-logo svg {
-        width: 100px;
-        height: 27px;
+    .agoda-logo-img {
+        height: 28px;
     }
 }
 
 @media (max-width: 480px) {
-    .agoda-logo svg {
-        width: 80px;
-        height: 22px;
+    .agoda-logo-img {
+        height: 24px;
     }
 }
