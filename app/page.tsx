@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -9,6 +9,11 @@ import { Slider } from '@/components/ui/slider'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
+import { SupportBlock } from '@/components/ui/support-block'
+import { SupportOverlay } from '@/components/ui/support-overlay'
+import { nudgeSupportOncePerDay } from '@/lib/support-nudge'
+import { trackConversionSuccess } from '@/lib/analytics'
+import { showToast } from '@/lib/toast'
 import { 
   Upload, 
   Video, 
@@ -42,6 +47,7 @@ export default function VideoToGifConverter() {
   const [videoFrames, setVideoFrames] = useState<VideoFrame[]>([])
   const [currentFrame, setCurrentFrame] = useState(0)
   const [showPreview, setShowPreview] = useState(false)
+  const [showSupportOverlay, setShowSupportOverlay] = useState(false)
   
   const videoRef = useRef<HTMLVideoElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -134,6 +140,9 @@ export default function VideoToGifConverter() {
         setProgress(100)
         setShowPreview(true)
         
+        // Track conversion success
+        trackConversionSuccess()
+        
         // Scroll to the output section after conversion completes
         setTimeout(() => {
           const outputSection = document.querySelector('[data-output-section]')
@@ -143,6 +152,16 @@ export default function VideoToGifConverter() {
               block: 'start' 
             })
           }
+          
+          // Show support nudge after scrolling
+          setTimeout(() => {
+            nudgeSupportOncePerDay()
+          }, 500)
+          
+          // Show support overlay shortly after GIF preview appears (1.5 seconds)
+          setTimeout(() => {
+            setShowSupportOverlay(true)
+          }, 1500)
         }, 100)
         
         return
@@ -180,6 +199,19 @@ export default function VideoToGifConverter() {
     setCurrentFrame(0)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
+    }
+  }, [])
+
+  // Check for thanks URL parameter on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('thanks') === '1') {
+        showToast({
+          message: 'Thanks for the coffee! You rock 🤘',
+          duration: 6000
+        })
+      }
     }
   }, [])
 
@@ -231,6 +263,8 @@ export default function VideoToGifConverter() {
           downloadButton.disabled = false
           downloadButton.innerHTML = '<Download className="h-5 w-5 mr-3" />Download GIF'
         }
+        
+
       })
 
       gif.render()
@@ -268,20 +302,44 @@ export default function VideoToGifConverter() {
               </div>
             </div>
 
-            {/* Buy Me a Coffee Donation Button */}
-            <div className="flex items-center space-x-3">
-                              <a
+                        {/* Donate Section with Text and Buttons */}
+            <div className="flex items-center space-x-4">
+              {/* Donate Text */}
+              <div className="text-right">
+                <p className="text-sm font-medium text-muted-foreground">
+                  Support this tool
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Help us keep building
+                </p>
+              </div>
+              
+              {/* Donate Buttons */}
+              <div className="flex items-center space-x-2">
+                {/* Buy Me a Coffee */}
+                <a
                   href="https://www.buymeacoffee.com/joeallison"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg"
-                  title="Support this tool with a coffee"
+                  className="group inline-flex items-center space-x-1.5 bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white px-3 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
+                  title="Support with Buy Me a Coffee"
                 >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span>Buy me a coffee</span>
-              </a>
+                  <span className="text-sm">☕</span>
+                  <span className="text-xs">Coffee</span>
+                </a>
+                
+                {/* PayPal */}
+                <a
+                  href="https://www.paypal.com/donate/?business=5NVA6Q7JXTHC4&amount=5&no_recurring=0&item_name=Supporting+an+independent+creator.+Your+donation+helps+keep+projects+alive+and+growing.+%E2%9D%A4%EF%B8%8F&currency_code=GBP"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
+                  title="Support via PayPal"
+                >
+                  <span className="text-sm">💸</span>
+                  <span className="text-xs">PayPal</span>
+                </a>
+              </div>
             </div>
 
           </div>
@@ -537,71 +595,97 @@ export default function VideoToGifConverter() {
 
             {/* Output Section - Only show when conversion is complete */}
             {showPreview && videoFrames.length > 0 && !isConverting && (
-              <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-output-section>
-                <CardHeader className="text-center">
-                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                    <CheckCircle className="h-10 w-10 text-white" />
-                  </div>
-                  <CardTitle className="text-2xl text-foreground">
-                    Conversion Complete!
-                  </CardTitle>
-                  <CardDescription className="text-lg text-muted-foreground">
-                    Your video has been converted to {videoFrames.length} frames
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-8">
-                  <div className="text-center">
-                    <div className="relative inline-block">
-                      <img
-                        src={videoFrames[currentFrame]?.dataUrl}
-                        alt="Animated GIF Preview"
-                        className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
-                        style={{
-                          animation: `frameAnimation ${videoFrames.length * (1000 / fps)}ms steps(${videoFrames.length}) infinite`
-                        }}
-                      />
-                      <style dangerouslySetInnerHTML={{
-                        __html: `
-                          @keyframes frameAnimation {
-                            ${videoFrames.map((_, index) => 
-                              `${(index / videoFrames.length) * 100}% { content: url("${videoFrames[index]?.dataUrl}"); }`
-                            ).join('\n')}
+              <>
+                <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-output-section>
+                  <CardHeader className="text-center">
+                    <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                      <CheckCircle className="h-10 w-10 text-white" />
+                    </div>
+                    <CardTitle className="text-2xl text-foreground">
+                      Conversion Complete!
+                    </CardTitle>
+                    <CardDescription className="text-lg text-muted-foreground">
+                      Your video has been converted to {videoFrames.length} frames
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-8">
+                    <div className="text-center">
+                      <div className="relative inline-block">
+                        <img
+                          src={videoFrames[currentFrame]?.dataUrl}
+                          alt="Animated GIF Preview"
+                          className="max-w-full h-auto rounded-xl border-4 border-card shadow-2xl"
+                          style={{
+                            animation: `frameAnimation ${videoFrames.length * (1000 / fps)}ms steps(${videoFrames.length}) infinite`
+                          }}
+                        />
+                        <style dangerouslySetInnerHTML={{
+                          __html: `
+                            @keyframes frameAnimation {
+                              ${videoFrames.map((_, index) => 
+                                `${(index / videoFrames.length) * 100}% { content: url("${videoFrames[index]?.dataUrl}"); }`
+                              ).join('\n')}
                           }
                         `
                       }} />
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
-                    <Button 
-                      onClick={downloadGif} 
-                      size="lg"
-                      data-download-button
-                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-                    >
-                      <Download className="h-5 w-5 mr-3" />
-                      <span data-download-text>Download GIF</span>
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      onClick={resetConverter}
-                      size="lg"
-                      className="border-border hover:bg-accent"
-                    >
-                      <RotateCcw className="h-5 w-5 mr-3" />
-                      Convert Another Video
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                    
+                    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                      <Button 
+                        onClick={downloadGif} 
+                        size="lg"
+                        data-download-button
+                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                      >
+                        <Download className="h-5 w-5 mr-3" />
+                        <span data-download-text>Download GIF</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={resetConverter}
+                        size="lg"
+                        className="border-border hover:bg-accent"
+                      >
+                        <RotateCcw className="h-5 w-5 mr-3" />
+                        Convert Another Video
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+
+              </>
             )}
           </div>
         </div>
       </main>
 
+      {/* Footer */}
+      <footer className="border-t bg-card/80 backdrop-blur-sm dark:bg-card/80 mt-16">
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center space-y-6">
+            {/* Support Block - Footer */}
+            <SupportBlock placement="footer" />
+            
+            {/* Footer Links */}
+            <div className="flex items-center justify-center text-sm text-muted-foreground">
+              <span>Made with ❤️ for the community</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
       {/* Hidden video and canvas for frame capture */}
       <video ref={videoRef} className="hidden" />
       <canvas ref={canvasRef} className="hidden" />
+
+      {/* Support Overlay - Roadblock after download */}
+      <SupportOverlay
+        isVisible={showSupportOverlay}
+        onClose={() => setShowSupportOverlay(false)}
+        supportersCount={42} // You can make this dynamic later
+      />
     </div>
   )
 }
