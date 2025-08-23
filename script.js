@@ -297,8 +297,14 @@ function createAnimatedPreview() {
     }
     
     try {
-        // Create animated preview using the first few frames
-        const previewFrames = window.videoFrames.slice(0, Math.min(10, window.videoFrames.length));
+        // Clear any existing animation
+        if (window.animationInterval) {
+            clearInterval(window.animationInterval);
+            window.animationInterval = null;
+        }
+        
+        // Create animated preview using all frames for smooth playback
+        const previewFrames = window.videoFrames;
         let currentFrameIndex = 0;
         
         // Clear previous content
@@ -308,24 +314,90 @@ function createAnimatedPreview() {
         const previewImg = document.createElement('img');
         previewImg.style.maxWidth = '100%';
         previewImg.style.borderRadius = 'var(--drone-radius-lg)';
+        previewImg.style.transition = 'opacity 0.1s ease-in-out';
+        previewImg.style.position = 'absolute';
+        previewImg.style.top = '50%';
+        previewImg.style.left = '50%';
+        previewImg.style.transform = 'translate(-50%, -50%) translateZ(0)';
         gifOutput.appendChild(previewImg);
         
-        // Animate preview
-        function animatePreview() {
-            if (previewFrames[currentFrameIndex]) {
-                previewImg.src = previewFrames[currentFrameIndex].canvas;
-                currentFrameIndex = (currentFrameIndex + 1) % previewFrames.length;
-                setTimeout(animatePreview, 200); // 5 FPS preview
+        // Add animation class to container
+        gifOutput.classList.add('preview-animating');
+        
+        // Calculate optimal frame timing for smooth preview
+        const avgFrameDelay = previewFrames.reduce((sum, frame) => sum + frame.delay, 0) / previewFrames.length;
+        const previewInterval = Math.max(avgFrameDelay, 100); // Minimum 100ms for smooth preview
+        
+        // Preload all images to prevent flickering
+        const preloadedImages = [];
+        let loadedCount = 0;
+        
+        previewFrames.forEach((frame, index) => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === previewFrames.length) {
+                    // All images loaded, start smooth animation
+                    startSmoothAnimation();
+                }
+            };
+            img.onerror = () => {
+                loadedCount++;
+                if (loadedCount === previewFrames.length) {
+                    startSmoothAnimation();
+                }
+            };
+            img.src = frame.canvas;
+            preloadedImages.push(img);
+        });
+        
+        // Smooth animation function
+        function startSmoothAnimation() {
+            // Set initial frame
+            previewImg.src = preloadedImages[0].src;
+            previewImg.style.opacity = '1';
+            
+            // Use requestAnimationFrame for smooth timing
+            let lastTime = 0;
+            
+            function animate(currentTime) {
+                if (!window.animationInterval) return; // Stop if cleared
+                
+                if (currentTime - lastTime >= previewInterval) {
+                    // Update frame
+                    currentFrameIndex = (currentFrameIndex + 1) % previewFrames.length;
+                    
+                    // Smooth frame transition
+                    previewImg.style.opacity = '0.8';
+                    
+                    setTimeout(() => {
+                        if (window.animationInterval) { // Check if still running
+                            previewImg.src = preloadedImages[currentFrameIndex].src;
+                            previewImg.style.opacity = '1';
+                        }
+                    }, 50);
+                    
+                    lastTime = currentTime;
+                }
+                
+                // Continue animation
+                if (window.animationInterval) {
+                    requestAnimationFrame(animate);
+                }
             }
+            
+            // Start the animation loop
+            requestAnimationFrame(animate);
         }
         
-        // Start animation
-        animatePreview();
+        // Store animation state for cleanup
+        window.animationInterval = true; // Use boolean flag instead of interval ID
         
-        // Store animation interval for cleanup
-        window.animationInterval = setInterval(animatePreview, 200);
-        
-        logInfo('Animated preview created', { frameCount: previewFrames.length });
+        logInfo('Smooth animated preview created', { 
+            frameCount: previewFrames.length, 
+            previewInterval: previewInterval,
+            avgFrameDelay: avgFrameDelay
+        });
         
     } catch (error) {
         logError('Error creating animated preview', error);
@@ -528,8 +600,14 @@ function resetConverter() {
     
     // Clear animation interval
     if (window.animationInterval) {
-        clearInterval(window.animationInterval);
+        window.animationInterval = false; // Stop the animation loop
         window.animationInterval = null;
+    }
+    
+    // Remove animation class from output
+    const gifOutput = document.getElementById('gifOutput');
+    if (gifOutput) {
+        gifOutput.classList.remove('preview-animating');
     }
     
     // Reset progress

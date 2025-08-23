@@ -636,11 +636,34 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* Prevent any overflow issues */
 }
 
 .gif-output img {
     max-width: 100%;
     border-radius: var(--drone-radius-md);
+    image-rendering: -webkit-optimize-contrast; /* Improve image quality */
+    image-rendering: crisp-edges;
+    backface-visibility: hidden; /* Prevent flickering on some browsers */
+    transform: translateZ(0); /* Force hardware acceleration */
+    will-change: opacity; /* Optimize opacity transitions */
+}
+
+/* Smooth GIF Preview Animation */
+.gif-output.preview-animating img {
+    transition: opacity 0.1s ease-in-out;
+}
+
+/* Prevent layout shift during animation */
+.gif-output {
+    position: relative;
+}
+
+.gif-output img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(0);
 }
 
 /* Output Actions Styles */
