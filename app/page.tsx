@@ -285,9 +285,9 @@ export default function VideoToGifConverter() {
     <div className="min-h-screen bg-gradient-to-br from-background via-blue-50 to-indigo-100 dark:from-background dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm dark:bg-card/80 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 sm:py-4">
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-6">
               <div className="flex items-center justify-center w-16 h-16 overflow-hidden">
                 <img 
                   src="/logo.png" 
@@ -311,7 +311,7 @@ export default function VideoToGifConverter() {
             </div>
 
             {/* Donate Section with Text and Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-6">
               {/* Donate Text */}
               <div className="text-right">
                 <p className="text-sm font-medium text-muted-foreground">
@@ -323,7 +323,7 @@ export default function VideoToGifConverter() {
               </div>
               
               {/* Donate Buttons */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 {/* Buy Me a Coffee */}
                 <a
                   href="https://www.buymeacoffee.com/joeallison"
