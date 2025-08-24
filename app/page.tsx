@@ -282,7 +282,7 @@ export default function VideoToGifConverter() {
   }, [videoFrames, fps, quality])
 
   return (
-    <div className="min-h-screen bg-blue-50/20 dark:bg-blue-950/10" style={{
+    <div className="min-h-screen bg-blue-50/30 dark:bg-blue-950/20" style={{
       backgroundImage: `url('/background_pattern.png')`,
       backgroundRepeat: 'repeat',
       backgroundSize: '200px 200px',
