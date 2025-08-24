@@ -314,7 +314,7 @@ export default function VideoToGifConverter() {
             <div className="hidden md:flex items-center space-x-6">
               {/* Donate Text */}
               <div className="text-right">
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-sm font-medium text-foreground">
                   Support this tool
                 </p>
                 <p className="text-xs text-muted-foreground">
