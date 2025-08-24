@@ -360,7 +360,7 @@ export default function VideoToGifConverter() {
           
           {/* Hero Section */}
           <section className="text-center mb-8">
-            <div className="max-w-2xl mx-auto space-y-3">
+            <div className="max-w-4xl mx-auto space-y-3">
               <h2 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
                 Transform Your Videos into Beautiful Animated GIFs
               </h2>
