@@ -93,6 +93,19 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYPVPWW2WL"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-SYPVPWW2WL');
+            `,
+          }}
+        />
       </head>
       <body className={inter.className}>{children}</body>
     </html>

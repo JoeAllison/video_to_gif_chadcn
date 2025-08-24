@@ -406,12 +406,12 @@ export default function VideoToGifConverter() {
       <main className="container mx-auto px-4 sm:px-4 py-10 sm:py-14">
         <div className="max-w-6xl mx-auto">
           
-          {/* Hero Section */}
-          <section className="text-center mb-12">
-            <div className="max-w-4xl mx-auto space-y-3">
-              <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight">
-                Transform Your Videos into Beautiful Animated GIFs
-              </h2>
+                      {/* Hero Section */}
+            <section className="text-center mb-12">
+              <div className="max-w-6xl mx-auto space-y-3">
+                <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight">
+                  Transform Your Videos into Beautiful Animated GIFs
+                </h2>
               <p className="text-muted-foreground">
                 Convert videos in your browser with GifVibes. Nothing is uploaded or stored on servers.
               </p>
