@@ -355,7 +355,7 @@ export default function VideoToGifConverter() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-4 py-12 sm:py-16">
+      <main className="container mx-auto px-4 sm:px-4 py-10 sm:py-14">
         <div className="max-w-6xl mx-auto">
           
           {/* Hero Section */}
