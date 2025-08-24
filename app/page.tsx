@@ -290,7 +290,7 @@ export default function VideoToGifConverter() {
             <div className="flex items-center space-x-4">
               <div className="flex items-center justify-center w-16 h-16 overflow-hidden">
                 <img 
-                  src="/logo.png" 
+                  src="/logo2.png" 
                   alt="GifVibes Logo" 
                   className="w-full h-full object-contain"
                 />
