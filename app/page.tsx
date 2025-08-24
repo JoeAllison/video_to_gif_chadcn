@@ -288,11 +288,11 @@ export default function VideoToGifConverter() {
         <div className="container mx-auto px-4 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-xl shadow-lg overflow-hidden">
+              <div className="flex items-center justify-center w-16 h-16 overflow-hidden">
                 <img 
                   src="/logo.png" 
                   alt="GifVibes Logo" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div>
