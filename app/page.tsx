@@ -414,13 +414,13 @@ export default function VideoToGifConverter() {
             {/* Upload Section - Only show before conversion starts */}
             {!isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
-                <CardContent className="px-4 sm:px-8 py-6 sm:py-8">
+                <CardContent className="px-4 sm:px-8 py-4 sm:py-6">
                   {/* Hero Section - Above the drop zone */}
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight mb-4">
+                  <div className="text-center mb-3">
+                    <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight mb-3">
                       Transform Your Videos into Beautiful Animated GIFs
                     </h2>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground mb-10">
                       Convert videos in your browser with GifVibes. Nothing is uploaded or stored on servers.
                     </p>
                   </div>
