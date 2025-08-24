@@ -716,7 +716,7 @@ export default function VideoToGifConverter() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-card/80 backdrop-blur-sm dark:bg-card/80 mt-16">
+      <footer className="border-t bg-white dark:bg-white mt-16">
         <div className="container mx-auto px-4 py-8">
           <div className="text-center space-y-6">
             {/* Support Block - Footer */}
