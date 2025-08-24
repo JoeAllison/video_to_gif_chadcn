@@ -28,9 +28,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://gifvibes.com'),
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     title: 'GifVibes - Professional Video to GIF Converter',
     description: 'Convert videos to animated GIFs instantly with GifVibes. Free, private, browser-based converter. No uploads, no registration required.',
@@ -66,9 +63,10 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code', // Add your Google Search Console code
-    yandex: 'your-yandex-verification-code', // Add if needed
-    yahoo: 'your-yahoo-verification-code', // Add if needed
+    // Add verification codes when you have them
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-verification-code',
+    // yahoo: 'your-yahoo-verification-code',
   },
   category: 'technology',
   classification: 'Web Application',
