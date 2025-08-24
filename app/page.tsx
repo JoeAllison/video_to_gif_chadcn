@@ -361,7 +361,7 @@ export default function VideoToGifConverter() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-4 py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto bg-blue-50/30 dark:bg-blue-950/20 rounded-2xl p-8 backdrop-blur-sm">
+        <div className="max-w-6xl mx-auto">
           
           {/* Hero Section */}
           <section className="text-center mb-12">
