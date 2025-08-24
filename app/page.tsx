@@ -304,9 +304,8 @@ export default function VideoToGifConverter() {
                     Vibes
                   </span>
                 </h1>
-                <p className="text-xs sm:text-sm text-muted-foreground flex items-center space-x-2">
-                  <Sparkles className="h-3 w-3 text-primary" />
-                  <span>Professional Video to GIF Converter</span>
+                <p className="text-xs sm:text-sm text-muted-foreground">
+                  Professional Video to GIF Converter
                 </p>
               </div>
             </div>
