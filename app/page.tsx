@@ -285,7 +285,7 @@ export default function VideoToGifConverter() {
     <div className="min-h-screen bg-blue-50/60 dark:bg-blue-950/40" style={{
       backgroundImage: `url('/background_pattern.png')`,
       backgroundRepeat: 'repeat',
-      backgroundSize: '200px 200px',
+      backgroundSize: '300px 300px',
       backgroundBlendMode: 'overlay'
     }}>
       {/* Header */}
