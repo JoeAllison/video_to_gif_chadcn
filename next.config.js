@@ -5,6 +5,10 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
+  },
+  // Fix for React 19 static export issues
+  experimental: {
+    optimizePackageImports: ['lucide-react']
   }
 }
 

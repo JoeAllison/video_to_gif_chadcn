@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Video to GIF Converter - Professional Tool',
-  description: 'Convert videos to animated GIFs with our advanced browser-based converter',
+  title: 'GifVibes - Professional Video to GIF Converter',
+  description: 'Convert videos to animated GIFs with GifVibes - our advanced browser-based converter',
 }
 
 export default function RootLayout({

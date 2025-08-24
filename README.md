@@ -1,6 +1,6 @@
-# MP4 to GIF Converter
+# GifVibes
 
-A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.
+A modern, browser-based video to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.
 
 <!-- Force Vercel to use latest commit with fixed dependencies -->
 
@@ -137,4 +137,4 @@ If you encounter any issues or have questions, please open an issue on GitHub.
 
 ---
 
-Built with ❤️ using Next.js and ShadCN UI
+Built with ❤️ by GifVibes using Next.js and ShadCN UI

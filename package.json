@@ -1,7 +1,7 @@
 {
-  "name": "mp4-to-gif-converter",
+  "name": "gifvibes",
   "version": "1.0.0",
-  "description": "A modern, browser-based MP4 to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.",
+  "description": "GifVibes - A modern, browser-based video to GIF converter that works entirely in your browser. No files are uploaded to any server - all processing happens locally for your privacy and security.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -285,25 +285,30 @@ export default function VideoToGifConverter() {
     <div className="min-h-screen bg-gradient-to-br from-background via-blue-50 to-indigo-100 dark:from-background dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm dark:bg-card/80 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-4 sm:py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-primary to-blue-600 rounded-xl shadow-lg">
                 <Video className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                  Video to GIF Converter
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                  <span className="bg-gradient-to-r from-primary via-blue-600 to-blue-700 bg-clip-text text-transparent drop-shadow-sm">
+                    Gif
+                  </span>
+                  <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-rose-600 bg-clip-text text-transparent drop-shadow-sm ml-1">
+                    Vibes
+                  </span>
                 </h1>
-                <p className="text-sm text-muted-foreground flex items-center space-x-2">
-                  <Sparkles className="h-3 w-3" />
+                <p className="text-xs sm:text-sm text-muted-foreground flex items-center space-x-2">
+                  <Sparkles className="h-3 w-3 text-primary" />
                   <span>Professional Video to GIF Converter</span>
                 </p>
               </div>
             </div>
 
-                        {/* Donate Section with Text and Buttons */}
-            <div className="flex items-center space-x-4">
+            {/* Donate Section with Text and Buttons */}
+            <div className="hidden md:flex items-center space-x-4">
               {/* Donate Text */}
               <div className="text-right">
                 <p className="text-sm font-medium text-muted-foreground">
@@ -347,17 +352,17 @@ export default function VideoToGifConverter() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 sm:px-4 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto">
           
           {/* Hero Section */}
           <section className="text-center mb-8">
             <div className="max-w-2xl mx-auto space-y-3">
-              <h2 className="text-3xl font-bold text-foreground leading-tight">
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground leading-tight">
                 Transform Your Videos into Beautiful Animated GIFs
               </h2>
               <p className="text-muted-foreground">
-                Convert videos in your browser. Nothing is uploaded or stored on servers.
+                Convert videos in your browser with GifVibes. Nothing is uploaded or stored on servers.
               </p>
             </div>
           </section>
@@ -370,10 +375,10 @@ export default function VideoToGifConverter() {
             {/* Upload Section - Only show before conversion starts */}
             {!isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
-                <CardContent className="px-8 py-8">
+                <CardContent className="px-4 sm:px-8 py-6 sm:py-8">
                   <div
                     className={cn(
-                      "border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group",
+                      "border-2 border-dashed rounded-2xl p-6 sm:p-12 text-center transition-all duration-300 cursor-pointer group",
                       videoFile 
                         ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
                         : 'border-border hover:border-primary/50 hover:bg-accent/50'
@@ -384,26 +389,26 @@ export default function VideoToGifConverter() {
                   >
                                         {videoFile ? (
                       <div className="space-y-4">
-                        <div className="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                          <CheckCircle className="h-12 w-12 text-white" />
+                        <div className="mx-auto w-16 h-16 sm:w-24 sm:h-24 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                          <CheckCircle className="h-8 w-8 sm:h-12 sm:w-12 text-white" />
                         </div>
-                        <h3 className="text-2xl font-semibold text-green-700 dark:text-green-300">
+                        <h3 className="text-xl sm:text-2xl font-semibold text-green-700 dark:text-green-300">
                           File Selected!
                         </h3>
-                        <p className="text-foreground font-medium text-lg">{videoFile.name}</p>
+                        <p className="text-foreground font-medium text-base sm:text-lg">{videoFile.name}</p>
                         <p className="text-muted-foreground">
                           Scroll down to configure settings and start conversion
                         </p>
                       </div>
                     ) : (
                       <div className="space-y-6">
-                        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
-                          <FileVideo className="h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <div className="mx-auto w-16 h-16 sm:w-24 sm:h-24 bg-muted rounded-full flex items-center justify-center group-hover:bg-accent transition-colors">
+                          <FileVideo className="h-8 w-8 sm:h-12 sm:w-12 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
-                        <h3 className="text-2xl font-semibold text-foreground">
+                        <h3 className="text-xl sm:text-2xl font-semibold text-foreground">
                           Upload Your Video
                         </h3>
-                        <p className="text-muted-foreground text-lg">
+                        <p className="text-muted-foreground text-base sm:text-lg">
                           Drag and drop your video file or click to browse
                         </p>
                         
@@ -451,10 +456,10 @@ export default function VideoToGifConverter() {
 
             {/* Conversion Settings and Actions - Side by Side - Only show before conversion */}
             {videoFile && !isConverting && !showPreview && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mt-8">
                 {/* Conversion Settings */}
                 <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-section="conversion-settings">
-                  <CardHeader className="text-center">
+                  <CardHeader className="text-center px-4 sm:px-6">
                     <CardTitle className="flex items-center justify-center space-x-2 text-foreground">
                       <Settings className="h-5 w-5" />
                       <span>Conversion Settings</span>
@@ -463,7 +468,7 @@ export default function VideoToGifConverter() {
                       Customize your GIF output with these advanced settings
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-8">
+                  <CardContent className="space-y-8 px-4 sm:px-6 pb-6">
                     
                     {/* FPS Control */}
                     <div className="space-y-4">
@@ -529,7 +534,7 @@ export default function VideoToGifConverter() {
 
                 {/* Quick Actions */}
                 <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                  <CardHeader className="text-center pb-6">
+                  <CardHeader className="text-center pb-6 px-4 sm:px-6">
                     <CardTitle className="text-foreground text-xl">
                       Ready to Convert?
                     </CardTitle>
@@ -537,7 +542,7 @@ export default function VideoToGifConverter() {
                       Configure your settings on the left, then start the conversion process
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="text-center space-y-6 px-8 pb-8">
+                  <CardContent className="text-center space-y-6 px-4 sm:px-8 pb-6 sm:pb-8">
                     <Button 
                       onClick={startConversion} 
                       disabled={isConverting}
@@ -574,12 +579,12 @@ export default function VideoToGifConverter() {
             {/* Progress Section - Only show when converting and not showing preview */}
             {isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80">
-                <CardHeader className="text-center">
+                <CardHeader className="text-center px-4 sm:px-6">
                   <CardTitle className="text-foreground">
                     Converting Video
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-6 px-4 sm:px-6">
                   <Progress value={progress} className="w-full h-4" />
                   <div className="flex items-center justify-between">
                     <p className="text-muted-foreground">
@@ -597,18 +602,18 @@ export default function VideoToGifConverter() {
             {showPreview && videoFrames.length > 0 && !isConverting && (
               <>
                 <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80" data-output-section>
-                  <CardHeader className="text-center">
-                    <div className="mx-auto w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                      <CheckCircle className="h-10 w-10 text-white" />
+                  <CardHeader className="text-center px-4 sm:px-6">
+                    <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+                      <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
                     </div>
-                    <CardTitle className="text-2xl text-foreground">
+                    <CardTitle className="text-xl sm:text-2xl text-foreground">
                       Conversion Complete!
                     </CardTitle>
-                    <CardDescription className="text-lg text-muted-foreground">
+                    <CardDescription className="text-base sm:text-lg text-muted-foreground">
                       Your video has been converted to {videoFrames.length} frames
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-8">
+                  <CardContent className="space-y-8 px-4 sm:px-6">
                     <div className="text-center">
                       <div className="relative inline-block">
                         <img
@@ -636,7 +641,7 @@ export default function VideoToGifConverter() {
                         onClick={downloadGif} 
                         size="lg"
                         data-download-button
-                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                        className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 min-h-[48px] sm:min-h-[56px]"
                       >
                         <Download className="h-5 w-5 mr-3" />
                         <span data-download-text>Download GIF</span>
@@ -645,7 +650,7 @@ export default function VideoToGifConverter() {
                         variant="outline" 
                         onClick={resetConverter}
                         size="lg"
-                        className="border-border hover:bg-accent"
+                        className="border-border hover:bg-accent min-h-[48px] sm:min-h-[56px]"
                       >
                         <RotateCcw className="h-5 w-5 mr-3" />
                         Convert Another Video
@@ -670,7 +675,7 @@ export default function VideoToGifConverter() {
             
             {/* Footer Links */}
             <div className="flex items-center justify-center text-sm text-muted-foreground">
-              <span>Made with ❤️ for the community</span>
+              <span>Made with ❤️ by GifVibes for the community</span>
             </div>
           </div>
         </div>
