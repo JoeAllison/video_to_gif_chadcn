@@ -108,7 +108,7 @@ export function SupportOverlay({ isVisible, onClose, supportersCount }: SupportO
                 trackTipClick('bmc')
                 window.open('https://www.buymeacoffee.com/joeallison?utm_source=app&utm_medium=roadblock&utm_campaign=post_download', '_blank')
               }}
-              className="w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white py-4 text-xl font-bold shadow-2xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300 rounded-2xl"
+              className="w-full bg-gradient-to-r from-orange-400 to-pink-500 hover:from-orange-500 hover:to-pink-600 text-white py-6 text-xl font-bold shadow-2xl hover:shadow-orange-500/25 transform hover:scale-105 transition-all duration-300 rounded-2xl"
             >
               ☕ Buy me a coffee
             </Button>
@@ -119,7 +119,7 @@ export function SupportOverlay({ isVisible, onClose, supportersCount }: SupportO
                 trackTipClick('paypal')
                 window.open('https://www.paypal.com/donate/?business=5NVA6Q7JXTHC4&amount=5&no_recurring=0&item_name=Supporting+an+independent+creator.+Your+donation+helps+keep+projects+alive+and+growing.+%E2%9D%A4%EF%B8%8F&currency_code=GBP', '_blank')
               }}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 text-xl font-bold shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 rounded-2xl border-0"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-xl font-bold shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 rounded-2xl border-0"
             >
               💸 PayPal
             </Button>
