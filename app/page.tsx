@@ -282,7 +282,12 @@ export default function VideoToGifConverter() {
   }, [videoFrames, fps, quality])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-blue-50 to-indigo-100 dark:from-background dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-background via-blue-50 to-indigo-100 dark:from-background dark:via-slate-900 dark:to-slate-800" style={{
+      backgroundImage: `url('/background_pattern.png')`,
+      backgroundRepeat: 'repeat',
+      backgroundSize: '200px 200px',
+      backgroundBlendMode: 'overlay'
+    }}>
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm dark:bg-card/80 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4">
