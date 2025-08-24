@@ -282,12 +282,55 @@ export default function VideoToGifConverter() {
   }, [videoFrames, fps, quality])
 
   return (
-    <div className="min-h-screen bg-blue-50/70 dark:bg-blue-950/50" style={{
-      backgroundImage: `url('/background_pattern.png')`,
-      backgroundRepeat: 'repeat',
-      backgroundSize: '400px 400px',
-      backgroundBlendMode: 'overlay'
-    }}>
+    <>
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "GifVibes",
+            "description": "Convert videos to animated GIFs instantly with GifVibes. Free, private, browser-based video to GIF converter.",
+            "url": "https://gifvibes.com",
+            "applicationCategory": "MultimediaApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript. Requires HTML5.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "featureList": [
+              "Video to GIF conversion",
+              "MP4, MOV, AVI, WebM support",
+              "Browser-based processing",
+              "No file uploads",
+              "Privacy-focused",
+              "Instant conversion"
+            ],
+            "author": {
+              "@type": "Organization",
+              "name": "GifVibes"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "GifVibes"
+            },
+            "potentialAction": {
+              "@type": "UseAction",
+              "target": "https://gifvibes.com"
+            }
+          })
+        }}
+      />
+      
+      <div className="min-h-screen bg-blue-50/70 dark:bg-blue-950/50" style={{
+        backgroundImage: `url('/background_pattern.png')`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: '400px 400px',
+        backgroundBlendMode: 'overlay'
+      }}>
       {/* Header */}
       <header className="border-b bg-card/80 backdrop-blur-sm dark:bg-card/80 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 sm:py-4">
@@ -700,5 +743,6 @@ export default function VideoToGifConverter() {
         supportersCount={42} // You can make this dynamic later
       />
     </div>
+    </>
   )
 }
