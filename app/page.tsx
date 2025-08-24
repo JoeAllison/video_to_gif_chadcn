@@ -325,7 +325,7 @@ export default function VideoToGifConverter() {
         }}
       />
       
-      <div className="min-h-screen bg-blue-50/70 dark:bg-blue-950/50" style={{
+      <div className="min-h-screen bg-blue-50/70 dark:bg-blue-950/50 flex flex-col" style={{
         backgroundImage: `url('/background_pattern.png')`,
         backgroundRepeat: 'repeat',
         backgroundSize: '400px 400px',
@@ -403,20 +403,8 @@ export default function VideoToGifConverter() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-4 py-10 sm:py-14">
-        <div className="max-w-6xl mx-auto">
-          
-                      {/* Hero Section */}
-            <section className="text-center mb-12">
-              <div className="max-w-6xl mx-auto space-y-3">
-                <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight">
-                  Transform Your Videos into Beautiful Animated GIFs
-                </h2>
-              <p className="text-muted-foreground">
-                Convert videos in your browser with GifVibes. Nothing is uploaded or stored on servers.
-              </p>
-            </div>
-          </section>
+      <main className="container mx-auto px-4 sm:px-4 py-10 sm:py-14 flex-1 flex items-center justify-center">
+        <div className="max-w-6xl mx-auto w-full">
           
           {/* Main Converter Section - Single Column Layout */}
           <div className="space-y-8">
@@ -427,16 +415,26 @@ export default function VideoToGifConverter() {
             {!isConverting && !showPreview && (
               <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm dark:bg-card/80 w-full">
                 <CardContent className="px-4 sm:px-8 py-6 sm:py-8">
+                  {/* Hero Section - Above the drop zone */}
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl sm:text-4xl font-bold text-foreground leading-tight mb-4">
+                      Transform Your Videos into Beautiful Animated GIFs
+                    </h2>
+                    <p className="text-muted-foreground">
+                      Convert videos in your browser with GifVibes. Nothing is uploaded or stored on servers.
+                    </p>
+                  </div>
+                  
                   <div
-                    className={cn(
-                      "border-2 border-dashed rounded-2xl p-6 sm:p-12 text-center transition-all duration-300 cursor-pointer group",
-                      videoFile 
-                        ? 'border-green-500 bg-green-50/50 dark:bg-green-950/30 shadow-lg' 
-                        : 'border-border hover:border-primary/50 hover:bg-accent/50'
-                    )}
+                    className="border-2 border-dashed rounded-2xl p-6 sm:p-12 text-center transition-all duration-300 cursor-pointer group border-border hover:border-primary/50 hover:bg-accent/50 bg-gray-50/30"
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
-                    onClick={() => fileInputRef.current?.click()}
+                    onClick={() => {
+                      console.log('Drop zone clicked!')
+                      if (fileInputRef.current) {
+                        fileInputRef.current.click()
+                      }
+                    }}
                   >
                                         {videoFile ? (
                       <div className="space-y-4">

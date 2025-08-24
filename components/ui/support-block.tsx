@@ -20,16 +20,13 @@ const primaryCTAVariants = [
 
 export function SupportBlock({ placement, supportersCount }: SupportBlockProps) {
   const [currentSubline, setCurrentSubline] = useState(0)
-  const [primaryCTA, setPrimaryCTA] = useState('')
+  const [primaryCTA, setPrimaryCTA] = useState('☕ Buy me a coffee')
 
   useEffect(() => {
     // Rotate subline every 3 seconds
     const sublineInterval = setInterval(() => {
       setCurrentSubline((prev) => (prev + 1) % rotatingSublines.length)
     }, 3000)
-
-    // Set random primary CTA on load
-    setPrimaryCTA(primaryCTAVariants[Math.floor(Math.random() * primaryCTAVariants.length)])
 
     return () => clearInterval(sublineInterval)
   }, [])
